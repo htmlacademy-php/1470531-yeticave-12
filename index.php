@@ -45,6 +45,16 @@ $offers = [
         'image_url' => 'img/lot-6.jpg',
     ],
 ];
+
+function format_price ($price ) {
+    $rounded_price = ceil($price);
+
+    if ($rounded_price < 1000) {
+        return $rounded_price;
+    }
+
+    return number_format($rounded_price, 0, '', ' ') . ' ₽';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -120,7 +130,7 @@ $offers = [
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost">цена<b class="rub"> <?=$offer['price']?> р</b></span>
+                                <span class="lot__cost">цена<b class="rub"> <?=format_price($offer['price'])?></b></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
