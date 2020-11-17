@@ -130,7 +130,7 @@ function format_price ($price ) {
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost">цена<b class="rub"> <?=format_price($offer['price'])?></b></span>
+                                <span class="lot__cost">цена <?=format_price($offer['price'])?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
