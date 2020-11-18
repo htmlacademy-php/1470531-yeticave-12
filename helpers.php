@@ -143,4 +143,19 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+/**
+ * Форматирует число. Отделяет пробелом тысячные части и добавляет символ рубля
+ *
+ * @param float $price Цена товара
+ * @return string Цена товара с символом рубля
+ */
+function format_price(float $price): string
+{
+    $rounded_price = ceil($price);
 
+    if ($rounded_price < 1000) {
+        return $rounded_price;
+    }
+
+    return number_format($rounded_price, 0, '', ' ') . ' ₽';
+}

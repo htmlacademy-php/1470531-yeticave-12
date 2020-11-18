@@ -1,7 +1,7 @@
 <?php
 
-include_once 'functions/format-price.php';
-include_once 'site-data/data.php';
+include_once 'helpers.php';
+include_once 'config.php';
 
 ?>
 <!DOCTYPE html>
