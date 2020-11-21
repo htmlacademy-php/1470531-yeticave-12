@@ -56,7 +56,11 @@ include_once 'config.php';
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <!--заполните этот список из массива категорий-->
+            <?php foreach ($categories as $category): ?>
+                <li class="promo__item promo__item--boards">
+                    <a class="promo__link" href="pages/all-lots.html"><?=$category ?></a>
+                </li>
+            <?php endforeach; ?>
             <li class="promo__item promo__item--boards">
                 <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
             </li>
@@ -78,7 +82,7 @@ include_once 'config.php';
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost">цена <?=format_price($offer['price'])?></span>
+                                <span class="lot__cost"><?=format_price($offer['price'])?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
