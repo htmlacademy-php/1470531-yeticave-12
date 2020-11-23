@@ -57,13 +57,10 @@ include_once 'config.php';
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--boards">
-                    <a class="promo__link" href="pages/all-lots.html"><?=$category ?></a>
+                <li class="promo__item promo__item promo__item--<?=$category['css_modifier']?>">
+                    <a class="promo__link" href="pages/all-lots.html"><?=$category['name'] ?></a>
                 </li>
             <?php endforeach; ?>
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
-            </li>
         </ul>
     </section>
     <section class="lots">
@@ -101,7 +98,7 @@ include_once 'config.php';
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?=$category?></a>
+                    <a href="pages/all-lots.html"><?=$category['name']?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

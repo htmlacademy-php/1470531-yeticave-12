@@ -4,7 +4,30 @@ $is_auth = rand(0, 1);
 $user_name = 'Alexey'; // укажите здесь ваше имя
 
 $categories = [
-    'Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'
+    [
+        'name' => 'Доски и лыжи',
+        'css_modifier' => 'boards'
+    ],
+    [
+        'name' => 'Крепления',
+        'css_modifier' => 'attachment'
+    ],
+    [
+        'name' => 'Ботинкии',
+        'css_modifier' => 'boots'
+    ],
+    [
+        'name' => 'Одежда',
+        'css_modifier' => 'clothing'
+    ],
+    [
+        'name' => 'Инструменты',
+        'css_modifier' => 'tools'
+    ],
+    [
+        'name' => 'Разное',
+        'css_modifier' => 'other'
+    ],
 ];
 
 $offers = [
