@@ -1,50 +1,8 @@
 <?php
-$is_auth = rand(0, 1);
 
-$user_name = 'Alexey'; // укажите здесь ваше имя
+include_once 'helpers.php';
+include_once 'config.php';
 
-$categories = [
-    'Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'
-];
-
-$offers = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => $categories[0],
-        'price' => '10999',
-        'image_url' => 'img/lot-1.jpg',
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => $categories[0],
-        'price' => '159999	',
-        'image_url' => 'img/lot-2.jpg',
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => $categories[1],
-        'price' => '8000',
-        'image_url' => 'img/lot-3.jpg',
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => $categories[2],
-        'price' => '10999',
-        'image_url' => 'img/lot-4.jpg',
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => $categories[4],
-        'price' => '7500',
-        'image_url' => 'img/lot-5.jpg',
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => $categories[5],
-        'price' => '5400',
-        'image_url' => 'img/lot-6.jpg',
-    ],
-];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -98,10 +56,11 @@ $offers = [
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <!--заполните этот список из массива категорий-->
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
-            </li>
+            <?php foreach ($categories as $category): ?>
+                <li class="promo__item promo__item promo__item--<?=$category['css_modifier']?>">
+                    <a class="promo__link" href="pages/all-lots.html"><?=$category['name'] ?></a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </section>
     <section class="lots">
@@ -120,7 +79,7 @@ $offers = [
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost">цена<b class="rub"> <?=$offer['price']?> р</b></span>
+                                <span class="lot__cost"><?=format_price($offer['price'])?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
@@ -139,7 +98,7 @@ $offers = [
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?=$category?></a>
+                    <a href="pages/all-lots.html"><?=$category['name']?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
