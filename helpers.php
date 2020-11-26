@@ -21,6 +21,26 @@ function is_date_valid(string $date) : bool {
 }
 
 /**
+ * Возвращает оставшееся количество часов и минут до переданной даты
+ * @param string $date дата в формате 'ГГГГ-ММ-ДД'
+ * @return array массив вида [ЧЧ, ММ]
+ */
+function getRemainingTime(string $date): array
+{
+    $seconds_in_one_minute = 3600;
+    $minutes_in_one_hour = 60;
+    $current_timestamp = time();
+    $end_timestamp = strtotime($date);
+
+    $remaining_seconds = $end_timestamp - $current_timestamp;
+
+    $hours = str_pad(floor($remaining_seconds / $seconds_in_one_minute), 2, "0", STR_PAD_LEFT);
+    $minutes = str_pad(floor(($remaining_seconds % $seconds_in_one_minute) / $minutes_in_one_hour), 2, "0", STR_PAD_LEFT);
+
+    return [$hours, $minutes];
+}
+
+/**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
  * @param $link mysqli Ресурс соединения
