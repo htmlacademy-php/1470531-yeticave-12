@@ -27,15 +27,16 @@ function is_date_valid(string $date) : bool {
  */
 function getRemainingTime(string $date): array
 {
-    $seconds_in_one_minute = 3600;
-    $minutes_in_one_hour = 60;
+    define('SECONDS_IN_ONE_MINUTE', 3600);
+    define('MINUTES_IN_ONE_HOUR', 60);
+
     $current_timestamp = time();
     $end_timestamp = strtotime($date);
 
     $remaining_seconds = $end_timestamp - $current_timestamp;
 
-    $hours = str_pad(floor($remaining_seconds / $seconds_in_one_minute), 2, "0", STR_PAD_LEFT);
-    $minutes = str_pad(floor(($remaining_seconds % $seconds_in_one_minute) / $minutes_in_one_hour), 2, "0", STR_PAD_LEFT);
+    $hours = str_pad(floor($remaining_seconds / SECONDS_IN_ONE_MINUTE), 2, "0", STR_PAD_LEFT);
+    $minutes = str_pad(floor(($remaining_seconds % SECONDS_IN_ONE_MINUTE) / MINUTES_IN_ONE_HOUR), 2, "0", STR_PAD_LEFT);
 
     return [$hours, $minutes];
 }
