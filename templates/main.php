@@ -39,9 +39,17 @@
                             <span class="lot__cost">
                                 <?= htmlspecialchars(format_price($offer['price'])) ?></span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
-                        </div>
+                        <?php
+                            [$hours, $minutes] = getRemainingTime($offer['expiration_date']);
+                            $css_class = $hours < 1 ? 'timer--finishing' : '';
+
+                            print <<<END
+                                <div class="lot__timer timer $css_class">
+                                    {$hours} : {$minutes}
+                                </div>
+                            END;
+                        ?>
+
                     </div>
                 </div>
             </li>
