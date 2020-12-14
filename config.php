@@ -22,5 +22,5 @@ mysqli_set_charset($mysql, "utf8");
 
 if (!$mysql) {
     print ('Ошибка подключения: ' . mysqli_connect_error());
-    // какая то обработка ошибки?
+    exit();
 }
