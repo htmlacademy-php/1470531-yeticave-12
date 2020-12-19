@@ -2,10 +2,20 @@
 /**
  * @var string $title
  * @var bool $is_auth
+ * @var bool $is_redirect_to_404
+ * @var bool $isContainerClass
  * @var string $user_name
  * @var string $content
  * @var array $categories
  */
+
+function redirect()
+{
+    header("Location: 404.php");
+    die();
+}
+
+$is_redirect_to_404 ? redirect() : null;
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -51,7 +61,7 @@
         </div>
     </header>
 
-    <main class="container"><?= $content; ?></main>
+    <main class="<?= $isContainerClass ? 'container' : '' ?>"><?= $content; ?></main>
 </div>
 
 <footer class="main-footer">
