@@ -180,3 +180,49 @@ function format_price(float $price): string
 
     return number_format($rounded_price, 0, '', ' ') . ' ₽';
 }
+
+/**
+ * Принимает ресурс соединения mysqli, возвращает массив категорий или пустой массив
+ *
+ * @param mysqli $sql_resource ресурс соедниения
+ * @return array возвращаемый массив категорий
+ */
+function getCategories(mysqli $sql_resource): array {
+    $query = "SELECT `id`, `title`, `symbol_code` FROM categories;";
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Принимает ресурс соединения mysqli, возвращает массив объявлений или пустой массив
+ *
+ * @param mysqli $sql_resource ресурс соедниения
+ * @return array возвращаемый массив категорий
+ */
+function getOffers(mysqli $sql_resource): array {
+    $query = "   SELECT l.title                                title,
+                           l.id                                   id,
+                           l.starting_price                       starting_price,
+                           IFNULL(MAX(b.price), l.starting_price) current_price,
+                           l.image                                image,
+                           l.completion_date                      completion_date,
+                           c.title                                category
+                    FROM lots l
+                             JOIN categories c on c.id = l.category_id
+                             LEFT JOIN bets b on l.id = b.lot_id
+                    WHERE l.completion_date > NOW()
+                    GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id
+                    ORDER BY l.created_on DESC";
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
