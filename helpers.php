@@ -260,3 +260,12 @@ where l.id = $id;";
 
     return [];
 }
+
+/**
+ * Перенаправляет на страницу 404
+ */
+function redirect_to_404(): void
+{
+    header("Location: 404.php");
+    die();
+}

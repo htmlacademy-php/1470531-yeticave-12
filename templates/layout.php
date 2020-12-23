@@ -9,13 +9,6 @@
  * @var array $categories
  */
 
-function redirect()
-{
-    header("Location: 404.php");
-    die();
-}
-
-$is_redirect_to_404 ? redirect() : null;
 ?>
 <!DOCTYPE html>
 <html lang="ru">

@@ -21,9 +21,13 @@ if ($offer['id']) {
     $is_error = true;
 }
 
+if ($is_error) {
+    redirect_to_404();
+}
+
+
 $layout_content = include_template('layout.php', [
     'title' => $offer['title'],
-    'is_redirect_to_404' => $is_error,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
