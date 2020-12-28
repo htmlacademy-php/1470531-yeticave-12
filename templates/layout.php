@@ -2,7 +2,6 @@
 /**
  * @var string $title
  * @var bool $is_auth
- * @var bool $is_redirect_to_404
  * @var bool $isContainerClass
  * @var string $user_name
  * @var string $content
