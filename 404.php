@@ -11,7 +11,7 @@ $main_page_content = include_template('404.php', [
 ]);
 
 $layout_content = include_template('layout.php', [
-    'title' => $page_titles['404'],
+    'title' => 'Страница не найдена',
     'is_redirect_to_404' => false,
     'isContainerClass' => false,
     'is_auth' => $is_auth,

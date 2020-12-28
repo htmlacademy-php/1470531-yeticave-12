@@ -13,7 +13,7 @@ $main_page_content = include_template('main.php', [
 ]);
 
 $layout_content = include_template('layout.php', [
-    'title' => $page_titles['main'],
+    'title' => 'Главная',
     'isContainerClass' => true,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
