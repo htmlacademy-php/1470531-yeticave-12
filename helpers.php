@@ -248,13 +248,15 @@ function getOfferById(mysqli $sql_resource, int $id): array
        l.completion_date                      completion_date,
        l.bet_step                             bet_step,
        c.title                                category
-from lots l
+FROM lots l
          JOIN categories c on c.id = l.category_id
          LEFT JOIN bets b on l.id = b.lot_id
-where l.id = $id;";
+WHERE l.id = $id
+GROUP BY l.id;";
     $res = mysqli_query($sql_resource, $query);
+    $row_count = mysqli_num_rows($res);
 
-    if ($res) {
+    if ($row_count) {
         return mysqli_fetch_assoc($res);
     }
 

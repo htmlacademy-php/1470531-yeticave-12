@@ -12,7 +12,7 @@ if (!$id || $id < 0) {
 
 $offer = getOfferById($mysql, $id);
 
-if (!count($offer) || !$offer['id']) {
+if (!count($offer)) {
     redirect_to_404();
 }
 
