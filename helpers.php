@@ -231,6 +231,26 @@ function getOffers(mysqli $sql_resource): array
 }
 
 /**
+ * Создает оффер из переданного массива с данными
+ *
+ * @param mysqli $sql_resource
+ * @param array $data - ассоциативный массив с данными
+ * @return bool - возвращает true если операция успешна
+ */
+function createOffer(mysqli $sql_resource, array $data): bool
+{
+    $query = "INSERT INTO lots (title, description, image, starting_price, completion_date, bet_step, user_id, category_id)
+                VALUES ('$data[title]', '$data[description]', '$data[image]', $data[starting_price], '$data[completion_date]', $data[bet_step], 1, $data[category_id]);";
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return $res;
+    }
+
+    return false;
+}
+
+/**
  * Принимает ресурс соединения mysqli и id лота, возвращает массив объявлений или пустой массив
  *
  * @param mysqli $sql_resource ресурс соедниения
@@ -270,4 +290,20 @@ function redirect_to_404(): void
 {
     header("Location: 404.php");
     die();
+}
+
+/**
+ * Возвращает расширение файла в зависимости от переданного mime type
+ *
+ * @param string $mime_type
+ * @return string
+ */
+function get_extension(string $mime_type): string
+{
+    $extensions = array(
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+    );
+
+    return $extensions[$mime_type];
 }
