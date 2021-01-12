@@ -4,17 +4,16 @@ include_once 'helpers.php';
 include_once 'config.php';
 
 $categories = getCategories($mysql);
-$offers = getOffers($mysql);
 
 
-$main_page_content = include_template('main.php', [
+$main_page_content = include_template('404.php', [
     'categories' => $categories,
-    'offers' => $offers,
 ]);
 
 $layout_content = include_template('layout.php', [
-    'title' => 'Главная',
-    'isContainerClass' => true,
+    'title' => 'Страница не найдена',
+    'is_redirect_to_404' => false,
+    'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $main_page_content,

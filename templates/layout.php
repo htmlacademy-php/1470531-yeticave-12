@@ -2,10 +2,12 @@
 /**
  * @var string $title
  * @var bool $is_auth
+ * @var bool $isContainerClass
  * @var string $user_name
  * @var string $content
  * @var array $categories
  */
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -51,7 +53,7 @@
         </div>
     </header>
 
-    <main class="container"><?= $content; ?></main>
+    <main class="<?= $isContainerClass ? 'container' : '' ?>"><?= $content; ?></main>
 </div>
 
 <footer class="main-footer">

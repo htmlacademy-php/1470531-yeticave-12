@@ -6,10 +6,6 @@ $is_auth = rand(0, 1);
 
 $user_name = 'Alexey'; // укажите здесь ваше имя
 
-$page_titles = [
-    'main' => 'Главная'
-];
-
 $db = [
     'host' => 'localhost',
     'user' => 'user',

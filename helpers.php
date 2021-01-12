@@ -180,3 +180,94 @@ function format_price(float $price): string
 
     return number_format($rounded_price, 0, '', ' ') . ' ₽';
 }
+
+/**
+ * Принимает ресурс соединения mysqli, возвращает массив категорий или пустой массив
+ *
+ * @param mysqli $sql_resource ресурс соедниения
+ * @return array возвращаемый массив категорий
+ */
+function getCategories(mysqli $sql_resource): array
+{
+    $query = "SELECT `id`, `title`, `symbol_code` FROM categories;";
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Принимает ресурс соединения mysqli, возвращает массив объявлений или пустой массив
+ *
+ * @param mysqli $sql_resource ресурс соедниения
+ * @return array возвращаемый массив объявлений
+ */
+function getOffers(mysqli $sql_resource): array
+{
+    $query = "   SELECT l.title                                title,
+                           l.id                                   id,
+                           l.description                          description,
+                           l.starting_price                       starting_price,
+                           IFNULL(MAX(b.price), l.starting_price) current_price,
+                           l.image                                image,
+                           l.completion_date                      completion_date,
+                           c.title                                category
+                    FROM lots l
+                             JOIN categories c on c.id = l.category_id
+                             LEFT JOIN bets b on l.id = b.lot_id
+                    WHERE l.completion_date > NOW()
+                    GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id, l.description
+                    ORDER BY l.created_on DESC";
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Принимает ресурс соединения mysqli и id лота, возвращает массив объявлений или пустой массив
+ *
+ * @param mysqli $sql_resource ресурс соедниения
+ * @param int $id id лота
+ * @return array возвращаемый ассоциативный массив объявлений
+ */
+function getOfferById(mysqli $sql_resource, int $id): array
+{
+    $query = "SELECT l.title                                title,
+       l.id                                   id,
+       l.description                          description,
+       l.starting_price                       starting_price,
+       IFNULL(MAX(b.price), l.starting_price) current_price,
+       l.image                                image,
+       l.completion_date                      completion_date,
+       l.bet_step                             bet_step,
+       c.title                                category
+FROM lots l
+         JOIN categories c on c.id = l.category_id
+         LEFT JOIN bets b on l.id = b.lot_id
+WHERE l.id = $id
+GROUP BY l.id;";
+    $res = mysqli_query($sql_resource, $query);
+    $row_count = mysqli_num_rows($res);
+
+    if ($row_count) {
+        return mysqli_fetch_assoc($res);
+    }
+
+    return [];
+}
+
+/**
+ * Перенаправляет на страницу 404
+ */
+function redirect_to_404(): void
+{
+    header("Location: 404.php");
+    die();
+}
