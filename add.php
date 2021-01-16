@@ -1,56 +1,31 @@
 <?php
 
 include_once 'helpers.php';
+include_once 'form-validators.php';
 include_once 'config.php';
 
 $categories = getCategories($mysql);
-$page_content;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $file = $_FILES['image'];
     $required = ['title', 'description', 'starting_price', 'completion_date', 'bet_step'];
-    $allowed_image_types = ['image/png', 'image/jpeg'];
     $errors = [];
     $starting_price = intval($_POST['starting_price'] ?? null);
     $bet_step = intval($_POST['bet_step'] ?? null);
     $completion_date = mysqli_real_escape_string($mysql, $_POST['completion_date'] ?? null);
-    $is_empty_file_field = $file && $file['size'] == 0;
-    $is_wrong_image_type = !$is_empty_file_field && !in_array($file['type'], $allowed_image_types, true);
 
     foreach ($required as $field) {
-        if (empty($form[$field])) {
-            $errors[$field] = 'Заполните это поле';
-        }
+        $errors[$field] = check_text($form[$field]);
     }
 
-    if ($is_empty_file_field) {
-        $errors['image'] = 'Загрузите изображение';
-    } else {
-        if ($is_wrong_image_type) {
-            $errors['image'] = 'Изображение должно быть в формате jpg или png';
-        }
-    }
+    $errors['image'] = check_image($file);
+    $errors['starting_price'] = check_number($starting_price);
+    $errors['bet_step'] = check_number($bet_step);
+    $errors['category_id'] = check_category($form['category_id'], $categories);
+    $errors['completion_date'] = check_date($completion_date);
 
-    if (!$starting_price || intval($starting_price) < 1) {
-        $errors['starting_price'] = 'Введите положительное число';
-    }
-
-    if (!$bet_step || intval($bet_step) < 1 || strpos('.', $bet_step) || strpos(',', $bet_step)) {
-        $errors['bet_step'] = 'Введите положительное целое число';
-    }
-
-    if (empty($form['category_id'])) {
-        $errors['category_id'] = 'Выберите категорию';
-    }
-
-    if (
-        !$completion_date
-        || !is_date_valid($completion_date)
-        || intval(getRemainingTime($completion_date)['0']) < 24
-    ) {
-        $errors['completion_date'] = 'Введите корректную дату';
-    }
+//    var_dump($errors);die();
 
     if (count($errors)) {
         $page_content = include_template('add.php', [
