@@ -26,6 +26,10 @@ function check_category(int $category_id, array $categories): ?string
  */
 function check_number(int $number): ?string
 {
+    if (empty($number)) {
+        return 'Заполните это поле';
+    }
+
     if (!$number || $number < 1) {
         return 'Введите положительное число';
     }
@@ -77,6 +81,10 @@ function check_text(string $text): ?string
  */
 function check_date(string $date): ?string
 {
+    if (empty($date)) {
+        return 'Заполните это поле';
+    }
+
     if (
         !$date
         || !is_date_valid($date)
