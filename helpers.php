@@ -1,4 +1,8 @@
 <?php
+
+define('SECONDS_IN_ONE_MINUTE', 3600);
+define('MINUTES_IN_ONE_HOUR', 60);
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -27,9 +31,6 @@ function is_date_valid(string $date) : bool {
  */
 function getRemainingTime(string $date): array
 {
-    define('SECONDS_IN_ONE_MINUTE', 3600);
-    define('MINUTES_IN_ONE_HOUR', 60);
-
     $current_timestamp = time();
     $end_timestamp = strtotime($date);
 
@@ -239,15 +240,14 @@ function getOffers(mysqli $sql_resource): array
  */
 function createOffer(mysqli $sql_resource, array $data): bool
 {
+    $offer_data = [
+        $data['title'], $data['description'], $data['image'], $data['starting_price'], $data['completion_date'], $data['bet_step'], $data['category_id']
+    ];
     $query = "INSERT INTO lots (title, description, image, starting_price, completion_date, bet_step, user_id, category_id)
-                VALUES ('$data[title]', '$data[description]', '$data[image]', $data[starting_price], '$data[completion_date]', $data[bet_step], 1, $data[category_id]);";
-    $res = mysqli_query($sql_resource, $query);
+                VALUES (?, ?, ?, ?, ?, ?, 1, ?);";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $offer_data);
 
-    if ($res) {
-        return $res;
-    }
-
-    return false;
+    return mysqli_stmt_execute($stmt);
 }
 
 /**
