@@ -33,27 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $move_image_res = move_uploaded_file($file['tmp_name'], SITE_ROOT . '/uploads/' . $file_name);
 
         if (!$move_image_res) {
-            $errors['image'] = 'Ошибка загрузки изображения';
+            header("Location: ./500.php");
+            exit();
         }
 
         $create_offer_res = createOffer($mysql, $form);
 
         if (!$create_offer_res) {
-            $errors['title'] = 'Ошибка создания лота';
+            header("Location: ./500.php");
+            exit();
         }
 
         $new_id = mysqli_insert_id($mysql);
 
-        if (count(array_filter($errors))) {
-            $page_content = include_template('add.php', [
-                'categories' => $categories,
-                'errors' => $errors,
-                'form' => []
-            ]);
-        } else {
-            header("Location: ./lot.php?id=$new_id");
-            exit();
-        }
+        header("Location: ./lot.php?id=$new_id");
+        exit();
     }
 } else {
     $page_content = include_template('add.php', [
