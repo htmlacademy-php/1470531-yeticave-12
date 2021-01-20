@@ -13,17 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $starting_price = intval($_POST['starting_price'] ?? null);
     $bet_step = intval($_POST['bet_step'] ?? null);
     $completion_date = mysqli_real_escape_string($mysql, $_POST['completion_date'] ?? null);
+    $errors['title'] = check_text($form['title']);
+    $errors['description'] = check_text($form['description']);
+    $errors['image'] = check_image($file);
+    $errors['starting_price'] = check_number($starting_price);
+    $errors['bet_step'] = check_number($bet_step);
+    $errors['category_id'] = check_category($form['category_id'], $categories);
+    $errors['completion_date'] = check_date($completion_date);
 
-
-    check_text($form['title']) ? $errors['title'] = check_text($form['title']) : null;
-    check_text($form['description']) ? $errors['description'] = check_text($form['description']) : null;
-    check_image($file) ? $errors['image'] = check_image($file) : null;
-    check_number($starting_price) ? $errors['starting_price'] = check_number($starting_price) : null;
-    check_number($bet_step) ? $errors['bet_step'] = check_number($bet_step) : null;
-    check_category($form['category_id'], $categories) ? $errors['category_id'] = check_category($form['category_id'], $categories) : null;
-    check_date($completion_date) ? $errors['completion_date'] = check_date($completion_date) : null;
-
-    if (count($errors)) {
+    if (count(array_filter($errors))) {
         $page_content = include_template('add.php', [
             'categories' => $categories,
             'form' => $form,
@@ -46,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $new_id = mysqli_insert_id($mysql);
 
-        if (count($errors)) {
+        if (count(array_filter($errors))) {
             $page_content = include_template('add.php', [
                 'categories' => $categories,
                 'errors' => $errors,
