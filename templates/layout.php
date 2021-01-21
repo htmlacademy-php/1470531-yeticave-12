@@ -16,6 +16,7 @@
     <title><?= $title; ?>></title>
     <link href="./css/normalize.min.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-wrapper">
@@ -30,7 +31,7 @@
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="./pages/add-lot.html">Добавить лот</a>
+            <a class="main-header__add-lot button" href="./add.php">Добавить лот</a>
 
             <nav class="user-menu">
                 <?php if ($is_auth): ?>
@@ -53,7 +54,7 @@
         </div>
     </header>
 
-    <main class="<?= $isContainerClass ? 'container' : '' ?>"><?= $content; ?></main>
+    <main class="<?= isset($isContainerClass) && $isContainerClass ? 'container' : '' ?>"><?= $content; ?></main>
 </div>
 
 <footer class="main-footer">
@@ -109,7 +110,7 @@
                 </svg>
             </a>
         </div>
-        <a class="main-footer__add-lot button" href="./pages/add-lot.html">Добавить лот</a>
+        <a class="main-footer__add-lot button" href="./add.php">Добавить лот</a>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>
             <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">
@@ -124,7 +125,7 @@
     </div>
 </footer>
 
-<script src="flatpickr.js"></script>
-<script src="script.js"></script>
+<script src="./flatpickr.js"></script>
+<script src="./script.js"></script>
 </body>
 </html>

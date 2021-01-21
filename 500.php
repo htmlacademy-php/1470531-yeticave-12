@@ -5,13 +5,12 @@ include_once 'config.php';
 
 $categories = getCategories($mysql);
 
-
-$main_page_content = include_template('404.php', [
+$main_page_content = include_template('500.php', [
     'categories' => $categories,
 ]);
 
 $layout_content = include_template('layout.php', [
-    'title' => 'Страница не найдена',
+    'title' => 'Что то пошло не так',
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,

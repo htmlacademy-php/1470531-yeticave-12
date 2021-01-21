@@ -1,4 +1,8 @@
 <?php
+
+define('SECONDS_IN_ONE_MINUTE', 3600);
+define('MINUTES_IN_ONE_HOUR', 60);
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -27,9 +31,6 @@ function is_date_valid(string $date) : bool {
  */
 function getRemainingTime(string $date): array
 {
-    define('SECONDS_IN_ONE_MINUTE', 3600);
-    define('MINUTES_IN_ONE_HOUR', 60);
-
     $current_timestamp = time();
     $end_timestamp = strtotime($date);
 
@@ -231,6 +232,25 @@ function getOffers(mysqli $sql_resource): array
 }
 
 /**
+ * Создает оффер из переданного массива с данными
+ *
+ * @param mysqli $sql_resource
+ * @param array $data - ассоциативный массив с данными
+ * @return bool - возвращает true если операция успешна
+ */
+function createOffer(mysqli $sql_resource, array $data): bool
+{
+    $offer_data = [
+        $data['title'], $data['description'], $data['image'], $data['starting_price'], $data['completion_date'], $data['bet_step'], $data['category_id']
+    ];
+    $query = "INSERT INTO lots (title, description, image, starting_price, completion_date, bet_step, user_id, category_id)
+                VALUES (?, ?, ?, ?, ?, ?, 1, ?);";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $offer_data);
+
+    return mysqli_stmt_execute($stmt);
+}
+
+/**
  * Принимает ресурс соединения mysqli и id лота, возвращает массив объявлений или пустой массив
  *
  * @param mysqli $sql_resource ресурс соедниения
@@ -270,4 +290,20 @@ function redirect_to_404(): void
 {
     header("Location: 404.php");
     die();
+}
+
+/**
+ * Возвращает расширение файла в зависимости от переданного mime type
+ *
+ * @param string $mime_type
+ * @return string
+ */
+function get_extension(string $mime_type): string
+{
+    $extensions = array(
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+    );
+
+    return $extensions[$mime_type];
 }
