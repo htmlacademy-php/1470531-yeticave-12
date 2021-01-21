@@ -95,3 +95,22 @@ function check_date(string $date): ?string
 
     return null;
 }
+
+/**
+ * Проверка введенного email
+ *
+ * @param string $email
+ * @return string|null
+ */
+function check_email(string $email): ?string
+{
+    if (empty($email)) {
+        return 'Заполните это поле';
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Введите правильный емейл адрес';
+    }
+
+    return null;
+}

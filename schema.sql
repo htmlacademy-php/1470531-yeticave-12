@@ -11,7 +11,9 @@ CREATE TABLE users
     id         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     email      VARCHAR(250) NOT NULL UNIQUE,
-    password   TEXT         NOT NULL
+    password   TEXT         NOT NULL,
+    name       TEXT         NOT NULL,
+    message    TEXT         NOT NULL
 );
 
 CREATE TABLE categories
