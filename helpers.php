@@ -317,6 +317,30 @@ function is_user_exist(mysqli $sql_resource, string $email): bool
 }
 
 /**
+ * Получает данные пользователя по email
+ *
+ * @param mysqli $sql_resource
+ * @param string $email - email пользователя
+ * @return array
+ */
+function get_user(mysqli $sql_resource, string $email): array
+{
+    $data = ['email' => $email];
+    $query = "SELECT * FROM users WHERE email = ?";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $data);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res);
+    }
+
+    return [];
+}
+
+/**
  * Создает пользователя
  *
  * @param mysqli $sql_resource
@@ -345,4 +369,22 @@ function get_extension(string $mime_type): string
     );
 
     return $extensions[$mime_type];
+}
+
+/**
+ * Генерирует контент для страниц авторизации/регистрации
+ *
+ * @param $template_name - имя шаблона (login, sign-in)
+ * @param $categories - массив категорий
+ * @param $form - данные формы
+ * @param $errors - массив ошибок
+ * @return string
+ */
+function get_auth_page_content($template_name, $categories, $form, $errors): string
+{
+    return include_template("$template_name.php", [
+        'categories' => $categories,
+        'form' => $form,
+        'errors' => $errors
+    ]);
 }
