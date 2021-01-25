@@ -2,6 +2,7 @@
 /**
  * @var array $categories
  * @var array $offer
+ * @var boolean $is_auth
  */
 $current_price = number_format($offer['current_price'], 0, '', ' ');
 $minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, '', ' ');
@@ -27,8 +28,9 @@ $minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, ''
             <p class="lot-item__description"><?= $offer['description'] ?></p>
         </div>
         <div class="lot-item__right">
-            <div class="lot-item__state">
-                <?php
+            <?php if ($is_auth): ?>
+                <div class="lot-item__state">
+                    <?php
                     [$hours, $minutes] = getRemainingTime($offer['completion_date']);
                     $css_class = $hours < 1 ? 'timer--finishing' : '';
 
@@ -37,25 +39,26 @@ $minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, ''
                                         {$hours} : {$minutes}
                                     </div>
                                 END;
-                ?>
-                <div class="lot-item__cost-state">
-                    <div class="lot-item__rate">
-                        <span class="lot-item__amount">Текущая цена</span>
-                        <span class="lot-item__cost"><?= $current_price ?></span>
+                    ?>
+                    <div class="lot-item__cost-state">
+                        <div class="lot-item__rate">
+                            <span class="lot-item__amount">Текущая цена</span>
+                            <span class="lot-item__cost"><?= $current_price ?></span>
+                        </div>
+                        <div class="lot-item__min-cost">
+                            Мин. ставка <span><?= $minimal_bet ?> р</span>
+                        </div>
                     </div>
-                    <div class="lot-item__min-cost">
-                        Мин. ставка <span><?= $minimal_bet ?> р</span>
-                    </div>
+                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
+                        <p class="lot-item__form-item form__item form__item--invalid">
+                            <label for="cost">Ваша ставка</label>
+                            <input id="cost" type="text" name="cost" placeholder="<?= $minimal_bet ?>">
+                            <span class="form__error">Введите наименование лота</span>
+                        </p>
+                        <button type="submit" class="button">Сделать ставку</button>
+                    </form>
                 </div>
-                <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-                    <p class="lot-item__form-item form__item form__item--invalid">
-                        <label for="cost">Ваша ставка</label>
-                        <input id="cost" type="text" name="cost" placeholder="<?= $minimal_bet ?>">
-                        <span class="form__error">Введите наименование лота</span>
-                    </p>
-                    <button type="submit" class="button">Сделать ставку</button>
-                </form>
-            </div>
+            <?php endif; ?>
             <div class="history">
                 <h3>История ставок (<span>10</span>)</h3>
                 <table class="history__list">

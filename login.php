@@ -4,6 +4,11 @@ include_once 'helpers.php';
 include_once 'form-validators.php';
 include_once 'config.php';
 
+if (isset($_SESSION['user'])) {
+    header("Location: ./");
+    exit();
+}
+
 $categories = getCategories($mysql);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
