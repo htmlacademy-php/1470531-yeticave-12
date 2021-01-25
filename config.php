@@ -7,6 +7,7 @@ if (file_exists('config.local.php')) {
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
+session_start();
 $is_auth = rand(0, 1);
 
 $user_name = 'Alexey'; // укажите здесь ваше имя

@@ -1,8 +1,9 @@
 USE yeticave;
 
-INSERT INTO users (created_on, email, password)
-VALUES ('2020-12-09 08:00:00', 'mail1@mail.local', '123456'),
-       ('2020-12-09 08:00:01', 'mail2@mail.local', '123456');
+/* password = 123456 */
+INSERT INTO users (created_on, email, password, name, message)
+VALUES ('2020-12-09 08:00:00', 'mail1@mail.local', '$2y$10$aH5llwcVwmClhqSP2OqhLeHLDOlhO4VRXIBZMMxeBkySUwd8AE24G', 'Вася', '8900-000-00-00'),
+       ('2020-12-09 08:00:01', 'mail2@mail.local', '$2y$10$aH5llwcVwmClhqSP2OqhLeHLDOlhO4VRXIBZMMxeBkySUwd8AE24G', 'Петя', 'mail@mail.com');
 
 
 INSERT INTO categories (created_on, title, symbol_code)

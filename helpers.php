@@ -293,6 +293,45 @@ function redirect_to_404(): void
 }
 
 /**
+ * Проверяет, существует ли пользователь по переданному емейлу
+ *
+ * @param mysqli $sql_resource
+ * @param string $email - email пользователя
+ * @return bool
+ */
+function is_user_exist(mysqli $sql_resource, string $email): bool
+{
+    $data = ['email' => $email];
+    $query = "SELECT id FROM users WHERE email = ?";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $data);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($res) > 0) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Создает пользователя
+ *
+ * @param mysqli $sql_resource
+ * @param $data - массив с данными из формы регистрации [email, name, password, message]
+ * @return bool
+ */
+function create_user(mysqli $sql_resource, $data): bool
+{
+    $query = "INSERT INTO users (email, name, password, message) VALUES (?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $data);
+
+    return mysqli_stmt_execute($stmt);
+}
+
+/**
  * Возвращает расширение файла в зависимости от переданного mime type
  *
  * @param string $mime_type
