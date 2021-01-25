@@ -22,9 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors
         ]);
     } else {
-        $email = mysqli_real_escape_string($mysql, $form['email']);
-
-        if (is_user_exist($mysql, $email)) {
+        if (is_user_exist($mysql, $form['email'])) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
 
             $page_content = include_template('sign-up.php', [
@@ -34,10 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ]);
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $name = mysqli_real_escape_string($mysql, $form['name']);
-            $message = mysqli_real_escape_string($mysql, $form['message']);
-            $data = ['email' => $email, 'name' => $name, 'password' => $password, 'message' => $message];
-
+            $data = ['email' => $form['email'], 'name' => $form['name'], 'password' => $password, 'message' => $form['message']];
             $create_user_res = create_user($mysql, $data);
 
             if (!$create_user_res) {
@@ -59,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $layout_content = include_template('layout.php', [
     'title' => "Регистрация",
-    'is_redirect_to_404' => false,
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
