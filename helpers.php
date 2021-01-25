@@ -299,9 +299,15 @@ function redirect_to_404(): void
  * @param string $email - email пользователя
  * @return bool
  */
-function is_user_exist(mysqli $sql_resource, string $email): bool {
-    $query = "SELECT id FROM users WHERE email = '$email'";
-    $res = mysqli_query($sql_resource, $query);
+function is_user_exist(mysqli $sql_resource, string $email): bool
+{
+    $data = ['email' => $email];
+    $query = "SELECT id FROM users WHERE email = ?";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $data);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($res) > 0) {
         return true;
@@ -314,21 +320,15 @@ function is_user_exist(mysqli $sql_resource, string $email): bool {
  * Создает пользователя
  *
  * @param mysqli $sql_resource
- * @param string $email
- * @param string $password
- * @param string $name
- * @param string $message
+ * @param $data - массив с данными из формы регистрации [email, name, password, message]
  * @return bool
  */
-function create_user(mysqli $sql_resource, string $email, string $password, string $name, string $message): bool {
-    $query = "INSERT INTO users (email, name, password, message) VALUES ('$email', '$name', '$password', '$message')";
-    $res = mysqli_query($sql_resource, $query);
+function create_user(mysqli $sql_resource, $data): bool
+{
+    $query = "INSERT INTO users (email, name, password, message) VALUES (?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, $data);
 
-    if ($res) {
-        return $res;
-    }
-
-    return false;
+    return mysqli_stmt_execute($stmt);
 }
 
 /**

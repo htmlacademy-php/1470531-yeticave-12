@@ -36,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
             $name = mysqli_real_escape_string($mysql, $form['name']);
             $message = mysqli_real_escape_string($mysql, $form['message']);
+            $data = ['email' => $email, 'name' => $name, 'password' => $password, 'message' => $message];
 
-            $create_user_res = create_user($mysql, $email, $password, $name, $message);
+            $create_user_res = create_user($mysql, $data);
 
             if (!$create_user_res) {
                 header("Location: ./500.php");
