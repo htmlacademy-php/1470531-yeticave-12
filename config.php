@@ -9,7 +9,7 @@ setlocale(LC_ALL, 'ru_RU');
 
 session_start();
 
-$is_auth = count($_SESSION);
+$is_auth = isset($_SESSION['user']);
 $user_name = $_SESSION['user']['name'] ?? '';
 
 $db = [
