@@ -370,21 +370,3 @@ function get_extension(string $mime_type): string
 
     return $extensions[$mime_type];
 }
-
-/**
- * Генерирует контент для страниц авторизации/регистрации
- *
- * @param $template_name - имя шаблона (login, sign-in)
- * @param $categories - массив категорий
- * @param $form - данные формы
- * @param $errors - массив ошибок
- * @return string
- */
-function get_auth_page_content($template_name, $categories, $form, $errors): string
-{
-    return include_template("$template_name.php", [
-        'categories' => $categories,
-        'form' => $form,
-        'errors' => $errors
-    ]);
-}
