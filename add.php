@@ -5,7 +5,7 @@ include_once 'form-validators.php';
 include_once 'config.php';
 
 if (!isset($_SESSION['user'])) {
-    header("Location: ./403.php");
+    header("Location: ./login.php");
     exit();
 }
 
