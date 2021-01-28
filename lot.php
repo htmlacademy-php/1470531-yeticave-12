@@ -19,6 +19,7 @@ if (!count($offer)) {
 $page_content = include_template('lot.php', [
     'categories' => $categories,
     'offer' => $offer,
+    'is_auth' => $is_auth
 ]);
 
 $layout_content = include_template('layout.php', [

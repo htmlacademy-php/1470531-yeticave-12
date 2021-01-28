@@ -8,9 +8,9 @@ date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
 session_start();
-$is_auth = rand(0, 1);
 
-$user_name = 'Alexey'; // укажите здесь ваше имя
+$is_auth = isset($_SESSION['user']);
+$user_name = $_SESSION['user']['name'] ?? '';
 
 $db = [
     'host' => 'localhost',
