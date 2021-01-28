@@ -370,3 +370,67 @@ function get_extension(string $mime_type): string
 
     return $extensions[$mime_type];
 }
+
+/**
+ * Возвращает количество найденных результатов поиска
+ * @param mysqli $sql_resource
+ * @param $data - выражение для поиска
+ * @return int
+ */
+function count_search(mysqli $sql_resource, string $data): int
+{
+    $sql = "SELECT COUNT(*) count
+            FROM lots
+            WHERE completion_date > NOW()
+              AND MATCH(title, description) AGAINST(?);";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$data]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res)['count'];
+    }
+
+    return 0;
+}
+
+/**
+ * Возвращает результаты поиска в виде массива
+ * @param mysqli $sql_resource
+ * @param string $data - выражение для поиска
+ * @param int $limit - максимальное количество результатов в итоговом массиве
+ * @param int $offset - сдвиг
+ * @return array
+ */
+function make_search(mysqli $sql_resource, string $data, int $limit, int $offset): array
+{
+    $sql = "SELECT l.title,
+                   l.id,
+                   l.description,
+                   l.starting_price,
+                   IFNULL(MAX(b.price), l.starting_price) current_price,
+                   l.image,
+                   l.completion_date,
+                   c.title                                category
+            FROM lots l
+                     JOIN categories c on c.id = l.category_id
+                     LEFT JOIN bets b on l.id = b.lot_id
+            WHERE l.completion_date > NOW()
+              AND MATCH(l.title, l.description) AGAINST(?)
+            GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id, l.description
+            ORDER BY l.created_on DESC
+            LIMIT $limit OFFSET $offset;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$data]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
