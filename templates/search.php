@@ -68,7 +68,7 @@
                 <a href="./search.php?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= $search ?>">Назад</a>
             </li>
             <?php foreach ($pages as $page): ?>
-                <li class="pagination-item <?= (int) $page === intval($current_page) ? 'pagination-item-active' : '' ?>">
+                <li class="pagination-item <?= $page === intval($current_page) ? 'pagination-item-active' : '' ?>">
                     <a href="./search.php?page=<?= $page ?>&search=<?= $search ?>"><?= $page ?></a>
                 </li>
             <?php endforeach; ?>

@@ -10,7 +10,7 @@ $page_items = 10;
 
 if ($search) {
     $items_count = count_search($mysql, $search);
-    $pages_count = ceil($items_count / $page_items);
+    $pages_count = intval(ceil($items_count / $page_items));
     $offset = ($current_page - 1) * $page_items;
     $pages = range(1, $pages_count);
     $offers = [];
