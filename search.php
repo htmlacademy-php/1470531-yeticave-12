@@ -6,7 +6,7 @@ include_once 'config.php';
 $categories = getCategories($mysql);
 $search = $_GET['search'] ?? '';
 $current_page = $_GET['page'] ?? 1;
-$page_items = 1;
+$page_items = 10;
 
 if ($search) {
     $items_count = count_search($mysql, $search);
