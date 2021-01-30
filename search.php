@@ -4,9 +4,9 @@ include_once 'helpers.php';
 include_once 'config.php';
 
 $categories = getCategories($mysql);
-$search = $_GET['search'] ?? '';
+$search = $_GET['search'] ? trim($_GET['search']) : '';
 $current_page = $_GET['page'] ?? 1;
-$page_items = 10;
+$page_items = 9;
 
 if ($search) {
     $items_count = count_search($mysql, $search);
