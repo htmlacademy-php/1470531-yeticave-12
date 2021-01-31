@@ -64,7 +64,7 @@
     </section>
     <?php if ($pages_count > 1): ?>
         <ul class="pagination-list">
-            <li class="pagination-item pagination-item-prev">
+            <li class="pagination-item pagination-item-prev <?= $current_page <= 1 ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= $search ?>">Назад</a>
             </li>
             <?php foreach ($pages as $page): ?>
@@ -72,7 +72,7 @@
                     <a href="./search.php?page=<?= $page ?>&search=<?= $search ?>"><?= $page ?></a>
                 </li>
             <?php endforeach; ?>
-            <li class="pagination-item pagination-item-next">
+            <li class="pagination-item pagination-item-next <?= intval($current_page) === $pages_count ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page < $pages_count ? $current_page + 1 : $pages_count ?>&search=<?= $search ?>">Вперед</a>
             </li>
         </ul>
