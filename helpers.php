@@ -421,8 +421,8 @@ function make_search(mysqli $sql_resource, string $data, int $limit, int $offset
               AND MATCH(l.title, l.description) AGAINST(?)
             GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id, l.description
             ORDER BY l.created_on DESC
-            LIMIT $limit OFFSET $offset;";
-    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$data]);
+            LIMIT ? OFFSET ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$data, $limit, $offset]);
 
     mysqli_stmt_execute($stmt);
 
