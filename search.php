@@ -27,6 +27,7 @@ if ($search) {
         'categories' => $categories,
         'search' => $search,
         'offers' => $offers,
+        'isEmptySearch' => true,
         'pages_count' => $pages_count,
         'pages' => $pages,
         'current_page' => $current_page
@@ -35,6 +36,7 @@ if ($search) {
     $page_content = include_template('search.php', [
         'categories' => $categories,
         'search' => $search,
+        'isEmptySearch' => true,
         'offers' => [],
         'pages_count' => 0,
         'pages' => [],

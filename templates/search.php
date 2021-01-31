@@ -6,6 +6,7 @@
  * @var int $pages_count
  * @var array $pages
  * @var int $current_page
+ * @var boolean $isEmptySearch
  */
 
 ?>
@@ -21,7 +22,11 @@
 </nav>
 <div class="container">
     <section class="lots">
-        <h2>Результаты поиска по запросу «<span><?= $search ?></span>»</h2>
+        <?php if ($isEmptySearch): ?>
+            <h2>Введите поисковый запрос</h2>
+        <?php else: ?>
+            <h2>Результаты поиска по запросу «<span><?= $search ?></span>»</h2>
+        <?php endif; ?>
         <ul class="lots__list">
             <?php if (count($offers)): ?>
                 <?php foreach ($offers as $offer): ?>
