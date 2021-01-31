@@ -727,6 +727,16 @@ main.container {
   margin-right: auto;
 }
 
+.pagination-item-next.disabled,
+.pagination-item-prev.disabled {
+  pointer-events: none;
+}
+
+.pagination-item-next.disabled a,
+.pagination-item-prev.disabled a{
+  color: #c3d3d9;
+}
+
 .pagination-item-next {
   margin-left: auto;
   margin-right: 0;

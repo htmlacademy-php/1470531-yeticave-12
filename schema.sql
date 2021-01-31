@@ -48,8 +48,7 @@ CREATE TABLE lots
         ON UPDATE SET NULL
 );
 
-CREATE INDEX lot_title ON lots (title);
-CREATE INDEX lot_description ON lots (description);
+CREATE FULLTEXT INDEX lot_search ON lots (title, description);
 
 CREATE TABLE bets
 (
