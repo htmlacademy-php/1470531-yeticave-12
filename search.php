@@ -15,6 +15,10 @@ if ($search) {
     $pages = range(1, $pages_count);
     $offers = [];
 
+    if ($current_page > $pages_count || $current_page < 1) {
+        redirect_to_404();
+    }
+
     if ($items_count) {
         $offers = make_search($mysql, $search, $page_items, $offset);
     }
