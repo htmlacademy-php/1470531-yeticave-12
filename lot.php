@@ -19,9 +19,9 @@ if (!count($offer)) {
 
 $bets = get_bets($mysql, $id);
 $is_lot_open = strtotime($offer['completion_date']) > time();
-$my_id = $_SESSION['user']['id'];
+$my_id = isset($_SESSION['user']) ? $_SESSION['user']['id'] : null;
 $is_offer_from_me = intval($offer['id']) === $my_id;
-$is_last_bet_from_me = $my_id === intval($bets[0]['id']);
+$is_last_bet_from_me = count($bets) ? $my_id === intval($bets[0]['id']) : false;
 
 $page_content = include_template('lot.php', [
     'categories' => $categories,
