@@ -143,6 +143,38 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
 }
 
 /**
+ * Возвращает дату в "человеческом формате"
+ *
+ * @param string $timestamp
+ * @return string
+ */
+function time_ago(string $timestamp): string
+{
+    $years = floor($timestamp / 31536000);
+    $days = floor(($timestamp - ($years * 31536000)) / 86400);
+    $hours = floor(($timestamp - ($years * 31536000 + $days * 86400)) / 3600);
+    $minutes = floor(($timestamp - ($years * 31536000 + $days * 86400 + $hours * 3600)) / 60);
+    $timestring = '';
+
+    if ($years > 0) {
+        $timestring .= $years . ' ' . get_noun_plural_form($years, 'год', 'года', 'лет') . ' ';
+    }
+    if ($days > 0) {
+        $timestring .= $days . ' ' . get_noun_plural_form($days, 'день', 'дня', 'дней') . ' ';
+    }
+    if ($hours > 0) {
+        $timestring .= $hours . ' ' . get_noun_plural_form($days, 'час', 'часа', 'часов') . ' ';
+    }
+    if ($minutes > 0) {
+        $timestring .= $minutes . ' ' . get_noun_plural_form($days, 'мин.', 'мин.', 'мин.') . ' ';
+    }
+
+    $timestring .= 'назад';
+
+    return $timestring;
+}
+
+/**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
  * @param array $data Ассоциативный массив с данными для шаблона
@@ -260,6 +292,7 @@ function createOffer(mysqli $sql_resource, array $data): bool
 function getOfferById(mysqli $sql_resource, int $id): array
 {
     $query = "SELECT l.title                                title,
+       l.created_on,
        l.id                                   id,
        l.description                          description,
        l.starting_price                       starting_price,
@@ -434,3 +467,98 @@ function make_search(mysqli $sql_resource, string $data, int $limit, int $offset
 
     return [];
 }
+
+/**
+ * Создает ставку
+ *
+ * @param mysqli $sql_resource
+ * @param int $bet - ставка
+ * @param int $offer_id - id оффера
+ * @param int $user_id - id польователя
+ * @return bool
+ */
+function make_bet(mysqli $sql_resource, int $bet, int $offer_id, int $user_id): bool
+{
+    $query = "INSERT INTO bets (price, lot_id, user_id) VALUES (?, ?, ?)";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$bet, $offer_id, $user_id]);
+
+    return mysqli_stmt_execute($stmt);
+}
+
+/**
+ * Возвращает массив ставок для лота
+ *
+ * @param mysqli $sql_resource
+ * @param int $lot_id - id лота
+ * @return array
+ */
+function get_bets(mysqli $sql_resource, int $lot_id): array
+{
+    $query = "  SELECT u.name, u.id, price, b.created_on
+                FROM bets b
+                         LEFT JOIN users u on b.user_id = u.id
+                WHERE lot_id = $lot_id
+                ORDER BY created_on DESC;";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает все ставки пользователя
+ *
+ * @param mysqli $sql_resource
+ * @param int $user_id - id пользователя
+ * @return array
+ */
+function get_my_bets(mysqli $sql_resource, int $user_id):array
+{
+    $query = "
+SELECT u.name,
+       price,
+       b.created_on,
+       l.title,
+       l.image,
+       l.completion_date,
+       l.id,
+       c.title category
+FROM bets b
+         LEFT JOIN users u on b.user_id = u.id
+         LEFT JOIN lots l on l.id = b.lot_id
+         LEFT JOIN categories c on l.category_id = c.id
+WHERE b.user_id = $user_id
+ORDER BY created_on DESC;";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращет текст ошибки для переданного кода ошибки
+ *
+ * @param string $error - текстовый код ошибки
+ * @return string
+ */
+function get_bet_error_text(string $error):string {
+    switch ($error) {
+        case 'empty':
+            return 'Введите ставку';
+        case 'not_num':
+            return 'Введите число';
+        case 'low':
+            return 'Ставка меньше минимальной';
+        default:
+            return '';
+    }
+}
+
