@@ -13,11 +13,7 @@ $minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, ''
 
 <nav class="nav">
     <ul class="nav__list container">
-        <?php foreach ($categories as $category): ?>
-            <li class="nav__item">
-                <a href="./"><?= htmlspecialchars($category['title']) ?></a>
-            </li>
-        <?php endforeach; ?>
+        <?= render_categories($categories) ?>
     </ul>
 </nav>
 <section class="lot-item container">

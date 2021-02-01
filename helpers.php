@@ -430,6 +430,31 @@ function count_search(mysqli $sql_resource, string $data): int
 }
 
 /**
+ * Возвращает количество найденных офферов для выбранной категории
+ * @param mysqli $sql_resource
+ * @param int $category_id - категории
+ * @return int
+ */
+function count_offers_in_category(mysqli $sql_resource, int $category_id): int
+{
+    $sql = "SELECT COUNT(*) count
+            FROM lots
+            WHERE completion_date > NOW()
+              AND category_id = ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$category_id]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res)['count'];
+    }
+
+    return 0;
+}
+
+/**
  * Возвращает результаты поиска в виде массива
  * @param mysqli $sql_resource
  * @param string $data - выражение для поиска
@@ -562,3 +587,62 @@ function get_bet_error_text(string $error):string {
     }
 }
 
+/**
+ * Возвращает массив лотов в зависимости от категории
+ *
+ * @param mysqli $sql_resource
+ * @param int $category_id
+ * @param int $limit
+ * @param int $offset
+ * @return array
+ */
+function get_lots_by_category(mysqli $sql_resource, int $category_id, int $limit, int $offset): array
+{
+    $sql = "SELECT l.title,
+                   l.id,
+                   l.description,
+                   l.starting_price,
+                   IFNULL(MAX(b.price), l.starting_price) current_price,
+                   l.image,
+                   l.completion_date,
+                   c.title                                category
+            FROM lots l
+                     JOIN categories c on c.id = l.category_id
+                     LEFT JOIN bets b on l.id = b.lot_id
+            WHERE l.completion_date > NOW()
+              AND l.category_id = ?
+            GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id, l.description
+            ORDER BY l.created_on DESC
+            LIMIT ? OFFSET ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$category_id, $limit, $offset]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает html разметку для списка категорий
+ *
+ * @param array $categories
+ * @return string
+ */
+function render_categories(array $categories): string
+{
+    $result = '';
+
+    foreach ($categories as $category) {
+        $title = htmlspecialchars($category['title']);
+        $result .= "<li class='nav__item'>
+                    <a href='./lots.php?category=$category[id]''>$title</a>
+                </li>";
+    }
+
+    return $result;
+}
