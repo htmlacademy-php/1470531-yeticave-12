@@ -2,10 +2,12 @@
 
 include_once 'helpers.php';
 include_once 'config.php';
+include_once 'set_winners.php';
+
+set_winners($mysql);
 
 $categories = getCategories($mysql);
 $offers = getOffers($mysql);
-
 
 $main_page_content = include_template('main.php', [
     'categories' => $categories,

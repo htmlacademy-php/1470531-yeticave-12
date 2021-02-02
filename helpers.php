@@ -635,7 +635,7 @@ function get_lots_by_category(mysqli $sql_resource, int $category_id, int $limit
 /**
  * Возвращает html разметку для списка категорий
  *
- * @param array $categories
+ * @param array $categories - массив категорий
  * @return string
  */
 function render_categories(array $categories): string
@@ -650,4 +650,58 @@ function render_categories(array $categories): string
     }
 
     return $result;
+}
+
+/**
+ * Возврвшает массив завершенных лотов без победителя
+ *
+ * @param mysqli $sql_resource
+ * @return array
+ */
+function get_completed_offers(mysqli $sql_resource): array
+{
+    $query = "SELECT * FROM lots WHERE winner_id IS NULL AND completion_date < NOW();";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает последнюю ставку для переданного лота
+ *
+ * @param mysqli $sql_resource
+ * @param int $offer_id - id оффера
+ * @return array
+ */
+function get_last_bet(mysqli $sql_resource, int $offer_id): array
+{
+    $query = "SELECT * FROM bets WHERE lot_id = $offer_id ORDER BY id DESC LIMIT 1;";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res);
+    }
+
+    return [];
+}
+
+/**
+ * Уставнваливает победителя для переданного лота
+ *
+ * @param $sql_resource
+ * @param int $offer_id - id оффера
+ * @param int $user_id - id пользователя
+ * @return bool
+ */
+function set_winner($sql_resource, int $offer_id, int $user_id): bool
+{
+    $query = "UPDATE lots SET winner_id = $user_id WHERE id = $offer_id;";
+
+    return mysqli_query($sql_resource, $query);
 }
