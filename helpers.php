@@ -156,6 +156,9 @@ function time_ago(string $timestamp): string
     $minutes = floor(($timestamp - ($years * 31536000 + $days * 86400 + $hours * 3600)) / 60);
     $timestring = '';
 
+    if ($timestamp < 60) {
+        $timestring .= 'менее минуты ';
+    }
     if ($years > 0) {
         $timestring .= $years . ' ' . get_noun_plural_form($years, 'год', 'года', 'лет') . ' ';
     }
@@ -545,13 +548,15 @@ function get_my_bets(mysqli $sql_resource, int $user_id):array
 {
     $query = "
 SELECT u.name,
+       (SELECT message FROM users WHERE l.user_id = users.id) contact,
        price,
        b.created_on,
        l.title,
        l.image,
        l.completion_date,
        l.id,
-       c.title category
+       c.title                                                         category,
+       l.winner_id
 FROM bets b
          LEFT JOIN users u on b.user_id = u.id
          LEFT JOIN lots l on l.id = b.lot_id

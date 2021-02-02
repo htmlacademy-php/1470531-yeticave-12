@@ -13,7 +13,8 @@ $bets = get_my_bets($mysql, $_SESSION['user']['id']);
 
 $page_content = include_template('my-bets.php', [
     'categories' => $categories,
-    'bets' => $bets
+    'bets' => $bets,
+    'user_id' => $_SESSION['user']['id']
 ]);
 
 $layout_content = include_template('layout.php', [
