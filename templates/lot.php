@@ -4,11 +4,11 @@
  * @var array $offer
  * @var boolean $is_bet_visible
  * @var string $bet_error
+ * @var string $current_price
+ * @var string $minimal_bet
  * @var array $bets
  */
 
-$current_price = number_format($offer['current_price'], 0, '', ' ');
-$minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, '', ' ');
 ?>
 
 <nav class="nav">
@@ -50,7 +50,7 @@ $minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, ''
                     </div>
                     <form
                         class="lot-item__form"
-                        action="make-bet.php?id=<?= $offer['id'] ?>&min=<?= $minimal_bet ?>"
+                        action="lot.php?id=<?= $offer['id'] ?>"
                         method="post"
                         autocomplete="off"
                     >
