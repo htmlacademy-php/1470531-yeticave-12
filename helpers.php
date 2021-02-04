@@ -166,10 +166,10 @@ function time_ago(string $timestamp): string
         $timestring .= $days . ' ' . get_noun_plural_form($days, 'день', 'дня', 'дней') . ' ';
     }
     if ($hours > 0) {
-        $timestring .= $hours . ' ' . get_noun_plural_form($days, 'час', 'часа', 'часов') . ' ';
+        $timestring .= $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' ';
     }
     if ($minutes > 0) {
-        $timestring .= $minutes . ' ' . get_noun_plural_form($days, 'мин.', 'мин.', 'мин.') . ' ';
+        $timestring .= $minutes . ' ' . get_noun_plural_form($minutes, 'мин.', 'мин.', 'мин.') . ' ';
     }
 
     $timestring .= 'назад';
@@ -644,9 +644,10 @@ function render_categories(array $categories): string
 
     foreach ($categories as $category) {
         $title = htmlspecialchars($category['title']);
-        $result .= "<li class='nav__item'>
-                    <a href='./lots.php?category=$category[id]''>$title</a>
-                </li>";
+        $string = '<li class="nav__item">
+                    <a href="./lots.php?category=%d">%s</a>
+                </li>';
+        $result .= sprintf($string, $category['id'], $title);
     }
 
     return $result;
@@ -680,9 +681,13 @@ function get_completed_offers(mysqli $sql_resource): array
  */
 function get_last_bet(mysqli $sql_resource, int $offer_id): array
 {
-    $query = "SELECT * FROM bets WHERE lot_id = $offer_id ORDER BY id DESC LIMIT 1;";
+    $query = "SELECT * FROM bets WHERE lot_id = ? ORDER BY id DESC LIMIT 1;";
 
-    $res = mysqli_query($sql_resource, $query);
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$offer_id]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
 
     if ($res) {
         return mysqli_fetch_assoc($res);
@@ -692,7 +697,7 @@ function get_last_bet(mysqli $sql_resource, int $offer_id): array
 }
 
 /**
- * Уставнваливает победителя для переданного лота
+ * Устанавливает победителя для переданного лота
  *
  * @param $sql_resource
  * @param int $offer_id - id оффера
@@ -701,7 +706,8 @@ function get_last_bet(mysqli $sql_resource, int $offer_id): array
  */
 function set_winner($sql_resource, int $offer_id, int $user_id): bool
 {
-    $query = "UPDATE lots SET winner_id = $user_id WHERE id = $offer_id;";
+    $query = "UPDATE lots SET winner_id = ? WHERE id = ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$user_id, $offer_id]);
 
-    return mysqli_query($sql_resource, $query);
+    return mysqli_stmt_execute($stmt);
 }
