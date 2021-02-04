@@ -2,6 +2,10 @@
 /**
  * @var array $categories
  * @var array $offers
+ * @var array $pages
+ * @var int $pages_count
+ * @var int $current_page
+ * @var string $category_title
  */
 
 ?>
@@ -14,7 +18,7 @@
 
 <div class="container">
     <section class="lots">
-        <h2>Все лоты в категории <span>«<?= $categories[$category_id]['title'] ?>»</span></h2>
+        <h2>Все лоты в категории <span>«<?= $category_title ?>»</span></h2>
         <ul class="lots__list">
             <?php foreach ($offers as $offer): ?>
                 <li class="lots__item lot">
