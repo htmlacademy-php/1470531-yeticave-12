@@ -22,7 +22,7 @@ $my_id = isset($_SESSION['user']) ? $_SESSION['user']['id'] : null;
 $is_offer_from_me = intval($offer['id']) === $my_id;
 $is_last_bet_from_me = count($bets) ? $my_id === intval($bets[0]['id']) : false;
 $current_price = number_format($offer['current_price'], 0, '', ' ');
-$minimal_bet = number_format($offer['bet_step'] + $offer['current_price'], 0, '', ' ');
+$minimal_bet = number_format(count($bets) ? $offer['bet_step'] + $offer['current_price'] : $offer['current_price'], 0, '', ' ');
 $bet_error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
