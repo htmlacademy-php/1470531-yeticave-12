@@ -46,7 +46,7 @@ if ($items_count) {
 }
 
 $layout_content = include_template('layout.php', [
-    'title' => 'Доступ запрещен',
+    'title' => 'Лоты в категории ' . $category_title,
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
