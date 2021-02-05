@@ -229,7 +229,14 @@ function getCategories(mysqli $sql_resource): array
     $res = mysqli_query($sql_resource, $query);
 
     if ($res) {
-        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $categories = [];
+        $raw_categories = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+        foreach ($raw_categories as $category) {
+            $categories[$category['id']] = $category;
+        }
+
+        return $categories;
     }
 
     return [];

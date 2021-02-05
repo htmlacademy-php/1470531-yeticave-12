@@ -17,7 +17,7 @@ $pages_count = intval(ceil($items_count / $page_items));
 $offset = ($current_page - 1) * $page_items;
 $pages = range(1, $pages_count);
 $offers = [];
-$category_title = $categories[$category_id - 1]['title'];
+$category_title = $categories[$category_id]['title'];
 
 if ($items_count !== 0 && $current_page > $pages_count || $current_page < 1) {
     redirect_to_404();
