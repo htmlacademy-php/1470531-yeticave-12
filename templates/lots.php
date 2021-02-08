@@ -2,11 +2,10 @@
 /**
  * @var array $categories
  * @var array $offers
- * @var string $search
- * @var int $pages_count
  * @var array $pages
+ * @var int $pages_count
  * @var int $current_page
- * @var boolean $isEmptySearch
+ * @var string $category_title
  */
 
 ?>
@@ -16,15 +15,12 @@
         <?= render_categories($categories) ?>
     </ul>
 </nav>
+
 <div class="container">
     <section class="lots">
-        <?php if ($isEmptySearch): ?>
-            <h2>Введите поисковый запрос</h2>
-        <?php else: ?>
-            <h2>Результаты поиска по запросу «<span><?= $search ?></span>»</h2>
-        <?php endif; ?>
-        <ul class="lots__list">
-            <?php if (count($offers)): ?>
+        <h2>Все лоты в категории <span>«<?= $category_title ?>»</span></h2>
+        <?php if (count($offers)): ?>
+            <ul class="lots__list">
                 <?php foreach ($offers as $offer): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
@@ -58,10 +54,10 @@
                         </div>
                     </li>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <p>Ничего не найдено по вашему запросу</p>
-            <?php endif; ?>
-        </ul>
+            </ul>
+        <?php else: ?>
+            <span>Товары в данной категории не найдены</span>
+        <?php endif; ?>
     </section>
     <?php if ($pages_count > 1): ?>
         <ul class="pagination-list">

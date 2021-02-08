@@ -143,6 +143,41 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
 }
 
 /**
+ * Возвращает дату в "человеческом формате"
+ *
+ * @param string $timestamp
+ * @return string
+ */
+function time_ago(string $timestamp): string
+{
+    $years = floor($timestamp / 31536000);
+    $days = floor(($timestamp - ($years * 31536000)) / 86400);
+    $hours = floor(($timestamp - ($years * 31536000 + $days * 86400)) / 3600);
+    $minutes = floor(($timestamp - ($years * 31536000 + $days * 86400 + $hours * 3600)) / 60);
+    $timestring = '';
+
+    if ($timestamp < 60) {
+        $timestring .= 'менее минуты ';
+    }
+    if ($years > 0) {
+        $timestring .= $years . ' ' . get_noun_plural_form($years, 'год', 'года', 'лет') . ' ';
+    }
+    if ($days > 0) {
+        $timestring .= $days . ' ' . get_noun_plural_form($days, 'день', 'дня', 'дней') . ' ';
+    }
+    if ($hours > 0) {
+        $timestring .= $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' ';
+    }
+    if ($minutes > 0) {
+        $timestring .= $minutes . ' ' . get_noun_plural_form($minutes, 'мин.', 'мин.', 'мин.') . ' ';
+    }
+
+    $timestring .= 'назад';
+
+    return $timestring;
+}
+
+/**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
  * @param array $data Ассоциативный массив с данными для шаблона
@@ -194,7 +229,14 @@ function getCategories(mysqli $sql_resource): array
     $res = mysqli_query($sql_resource, $query);
 
     if ($res) {
-        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $categories = [];
+        $raw_categories = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+        foreach ($raw_categories as $category) {
+            $categories[$category['id']] = $category;
+        }
+
+        return $categories;
     }
 
     return [];
@@ -260,6 +302,7 @@ function createOffer(mysqli $sql_resource, array $data): bool
 function getOfferById(mysqli $sql_resource, int $id): array
 {
     $query = "SELECT l.title                                title,
+       l.created_on,
        l.id                                   id,
        l.description                          description,
        l.starting_price                       starting_price,
@@ -397,6 +440,31 @@ function count_search(mysqli $sql_resource, string $data): int
 }
 
 /**
+ * Возвращает количество найденных офферов для выбранной категории
+ * @param mysqli $sql_resource
+ * @param int $category_id - категории
+ * @return int
+ */
+function count_offers_in_category(mysqli $sql_resource, int $category_id): int
+{
+    $sql = "SELECT COUNT(*) count
+            FROM lots
+            WHERE completion_date > NOW()
+              AND category_id = ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$category_id]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res)['count'];
+    }
+
+    return 0;
+}
+
+/**
  * Возвращает результаты поиска в виде массива
  * @param mysqli $sql_resource
  * @param string $data - выражение для поиска
@@ -433,4 +501,220 @@ function make_search(mysqli $sql_resource, string $data, int $limit, int $offset
     }
 
     return [];
+}
+
+/**
+ * Создает ставку
+ *
+ * @param mysqli $sql_resource
+ * @param int $bet - ставка
+ * @param int $offer_id - id оффера
+ * @param int $user_id - id польователя
+ * @return bool
+ */
+function make_bet(mysqli $sql_resource, int $bet, int $offer_id, int $user_id): bool
+{
+    $query = "INSERT INTO bets (price, lot_id, user_id) VALUES (?, ?, ?)";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$bet, $offer_id, $user_id]);
+
+    return mysqli_stmt_execute($stmt);
+}
+
+/**
+ * Возвращает массив ставок для лота
+ *
+ * @param mysqli $sql_resource
+ * @param int $lot_id - id лота
+ * @return array
+ */
+function get_bets(mysqli $sql_resource, int $lot_id): array
+{
+    $query = "  SELECT u.name, u.id, price, b.created_on
+                FROM bets b
+                         LEFT JOIN users u on b.user_id = u.id
+                WHERE lot_id = $lot_id
+                ORDER BY created_on DESC;";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает все ставки пользователя
+ *
+ * @param mysqli $sql_resource
+ * @param int $user_id - id пользователя
+ * @return array
+ */
+function get_my_bets(mysqli $sql_resource, int $user_id):array
+{
+    $query = "
+SELECT u.name,
+       (SELECT message FROM users WHERE l.user_id = users.id) contact,
+       price,
+       b.created_on,
+       l.title,
+       l.image,
+       l.completion_date,
+       l.id,
+       c.title                                                         category,
+       l.winner_id
+FROM bets b
+         LEFT JOIN users u on b.user_id = u.id
+         LEFT JOIN lots l on l.id = b.lot_id
+         LEFT JOIN categories c on l.category_id = c.id
+WHERE b.user_id = $user_id
+ORDER BY created_on DESC;";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращет текст ошибки для переданного кода ошибки
+ *
+ * @param string $error - текстовый код ошибки
+ * @return string
+ */
+function get_bet_error_text(string $error):string {
+    switch ($error) {
+        case 'empty':
+            return 'Введите ставку';
+        case 'not_num':
+            return 'Введите число';
+        case 'low':
+            return 'Ставка меньше минимальной';
+        default:
+            return '';
+    }
+}
+
+/**
+ * Возвращает массив лотов в зависимости от категории
+ *
+ * @param mysqli $sql_resource
+ * @param int $category_id
+ * @param int $limit
+ * @param int $offset
+ * @return array
+ */
+function get_lots_by_category(mysqli $sql_resource, int $category_id, int $limit, int $offset): array
+{
+    $sql = "SELECT l.title,
+                   l.id,
+                   l.description,
+                   l.starting_price,
+                   IFNULL(MAX(b.price), l.starting_price) current_price,
+                   l.image,
+                   l.completion_date,
+                   c.title                                category
+            FROM lots l
+                     JOIN categories c on c.id = l.category_id
+                     LEFT JOIN bets b on l.id = b.lot_id
+            WHERE l.completion_date > NOW()
+              AND l.category_id = ?
+            GROUP BY l.title, l.starting_price, l.image, l.created_on, c.title, l.completion_date, l.id, l.description
+            ORDER BY l.created_on DESC
+            LIMIT ? OFFSET ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $sql, [$category_id, $limit, $offset]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает html разметку для списка категорий
+ *
+ * @param array $categories - массив категорий
+ * @return string
+ */
+function render_categories(array $categories): string
+{
+    $result = '';
+
+    foreach ($categories as $category) {
+        $title = htmlspecialchars($category['title']);
+        $string = '<li class="nav__item">
+                    <a href="./lots.php?category=%d">%s</a>
+                </li>';
+        $result .= sprintf($string, $category['id'], $title);
+    }
+
+    return $result;
+}
+
+/**
+ * Возврвшает массив завершенных лотов без победителя
+ *
+ * @param mysqli $sql_resource
+ * @return array
+ */
+function get_completed_offers(mysqli $sql_resource): array
+{
+    $query = "SELECT * FROM lots WHERE winner_id IS NULL AND completion_date < NOW();";
+
+    $res = mysqli_query($sql_resource, $query);
+
+    if ($res) {
+        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+
+    return [];
+}
+
+/**
+ * Возвращает последнюю ставку для переданного лота
+ *
+ * @param mysqli $sql_resource
+ * @param int $offer_id - id оффера
+ * @return array
+ */
+function get_last_bet(mysqli $sql_resource, int $offer_id): array
+{
+    $query = "SELECT * FROM bets WHERE lot_id = ? ORDER BY id DESC LIMIT 1;";
+
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$offer_id]);
+
+    mysqli_stmt_execute($stmt);
+
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        return mysqli_fetch_assoc($res);
+    }
+
+    return [];
+}
+
+/**
+ * Устанавливает победителя для переданного лота
+ *
+ * @param $sql_resource
+ * @param int $offer_id - id оффера
+ * @param int $user_id - id пользователя
+ * @return bool
+ */
+function set_winner($sql_resource, int $offer_id, int $user_id): bool
+{
+    $query = "UPDATE lots SET winner_id = ? WHERE id = ?;";
+    $stmt = db_get_prepare_stmt($sql_resource, $query, [$user_id, $offer_id]);
+
+    return mysqli_stmt_execute($stmt);
 }
