@@ -1,5 +1,7 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
 if (file_exists('config.local.php')) {
     require_once 'config.local.php';
 }
