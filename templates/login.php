@@ -12,7 +12,8 @@
         <?= render_categories($categories) ?>
     </ul>
 </nav>
-<form class="form container <?= count(array_filter($errors)) ? 'form--invalid' : '' ?>" action="login.php" method="post">
+<form class="form container <?= count(array_filter($errors)) ? 'form--invalid' : '' ?>" action="login.php"
+      method="post">
     <h2>Вход</h2>
     <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>">
         <label for="email">E-mail <sup>*</sup></label>
