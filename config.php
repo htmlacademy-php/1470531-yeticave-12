@@ -30,7 +30,7 @@ if (!$mysql) {
 }
 
 /* Корневая папка сайта*/
-define ('SITE_ROOT', realpath(dirname(__FILE__)));
+define('SITE_ROOT', realpath(dirname(__FILE__)));
 
 /* Адрес сайта для email рассылки */
 define('SITE_PATH', 'http://localhost:8090');

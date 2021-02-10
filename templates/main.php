@@ -30,7 +30,7 @@
                 <div class="lot__info">
                     <span class="lot__category"><?= htmlspecialchars($offer['category']) ?></span>
                     <h3 class="lot__title">
-                        <a class="text-link" href="./lot.php?id=<?=$offer['id']?>">
+                        <a class="text-link" href="./lot.php?id=<?= $offer['id'] ?>">
                             <?= htmlspecialchars($offer['title']) ?>
                         </a>
                     </h3>
@@ -41,10 +41,10 @@
                                 <?= htmlspecialchars(format_price($offer['starting_price'])) ?></span>
                         </div>
                         <?php
-                            [$hours, $minutes] = getRemainingTime($offer['completion_date']);
-                            $css_class = $hours < 1 ? 'timer--finishing' : '';
+                        [$hours, $minutes] = getRemainingTime($offer['completion_date']);
+                        $css_class = $hours < 1 ? 'timer--finishing' : '';
 
-                            print <<<END
+                        print <<<END
                                 <div class="lot__timer timer $css_class">
                                     {$hours} : {$minutes}
                                 </div>

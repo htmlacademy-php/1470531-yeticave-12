@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bet_error = 'empty';
     } elseif (!is_numeric($form['bet'])) {
         $bet_error = 'not_num';
-    } elseif ($bet < ($offer['bet_step'] + $offer['current_price'])) {
+    } elseif ($bet < $offer['current_price']) {
         $bet_error = 'low';
     }
 
