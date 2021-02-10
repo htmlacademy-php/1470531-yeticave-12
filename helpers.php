@@ -668,7 +668,11 @@ function render_categories(array $categories): string
  */
 function get_completed_offers(mysqli $sql_resource): array
 {
-    $query = "SELECT * FROM lots WHERE winner_id IS NULL AND completion_date < NOW();";
+    $query = "  SELECT l.id, l.title, u.name, u.email
+                FROM lots l
+                         LEFT JOIN users u on u.id = l.user_id
+                WHERE l.winner_id IS NULL
+                  AND l.completion_date < NOW();";
 
     $res = mysqli_query($sql_resource, $query);
 

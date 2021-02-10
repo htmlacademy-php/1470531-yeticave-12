@@ -1,0 +1,13 @@
+{
+    "name": "user/1470531-yeticave-12",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Alexey Ivanov",
+            "email": "4985900@gmail.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
