@@ -4,6 +4,7 @@
  * @var array $errors
  * @var array $form
  */
+
 ?>
 
 <nav class="nav">
@@ -30,14 +31,16 @@
         <div class="form__item <?= isset($errors['category_id']) ? 'form__item--invalid' : '' ?>">
             <label for="category">Категория <sup>*</sup></label>
             <select id="category" name="category_id">
-                <?php foreach ($categories as $category): ?>
+                <?php
+                foreach ($categories as $category): ?>
                     <option
                         value="<?= $category['id'] ?>"
-                        <?= isset($form['category_id']) && $form['category_id'] == $category['id'] ? 'selected' : '' ?>
+                        <?= isset($form['category_id']) && $form['category_id'] === $category['id'] ? 'selected' : '' ?>
                     >
                         <?= $category['title'] ?>
                     </option>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             </select>
             <span class="form__error"><?= $errors['category_id'] ?? '' ?></span>
         </div>

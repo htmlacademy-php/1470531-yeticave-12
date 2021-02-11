@@ -15,7 +15,8 @@
 <section class="rates container">
     <h2>Мои ставки</h2>
     <table class="rates__list">
-        <?php foreach ($bets as $bet):
+        <?php
+        foreach ($bets as $bet):
             $is_win = $bet['winner_id'] && $user_id === intval($bet['winner_id']);
             $is_end = !$is_win && strtotime($bet['completion_date']) < time();
             ?>
@@ -31,20 +32,25 @@
                                 <?= htmlspecialchars($bet['title']) ?>
                             </a>
                         </h3>
-                        <?php if ($is_win): ?>
+                        <?php
+                        if ($is_win): ?>
                             <p><?= $bet['contact'] ?></p>
-                        <?php endif; ?>
+                        <?php
+                        endif; ?>
                     </div>
                 </td>
                 <td class="rates__category">
                     <?= $bet['category'] ?>
                 </td>
                 <td class="rates__timer">
-                    <?php if ($is_win): ?>
+                    <?php
+                    if ($is_win): ?>
                         <div class="timer timer--win">Ставка выиграла</div>
-                    <?php elseif ($is_end): ?>
+                    <?php
+                    elseif ($is_end): ?>
                         <div class="timer timer--end">Торги окончены</div>
-                    <?php else: ?>
+                    <?php
+                    else: ?>
                         <?php
                         [$hours, $minutes] = getRemainingTime($bet['completion_date']);
                         $css_class = $hours < 1 ? 'timer--finishing' : '';
@@ -55,7 +61,8 @@
                                 </div>
                             END;
                         ?>
-                    <?php endif; ?>
+                    <?php
+                    endif; ?>
                 </td>
                 <td class="rates__price">
                     <?= htmlspecialchars(format_price($bet['price'])) ?>
@@ -64,6 +71,7 @@
                     <?= time_ago(time() - strtotime($bet['created_on'])) ?>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?php
+        endforeach; ?>
     </table>
 </section>

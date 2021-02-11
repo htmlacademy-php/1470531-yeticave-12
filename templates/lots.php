@@ -19,9 +19,11 @@
 <div class="container">
     <section class="lots">
         <h2>Все лоты в категории <span>«<?= $category_title ?>»</span></h2>
-        <?php if (count($offers)): ?>
+        <?php
+        if (count($offers)): ?>
             <ul class="lots__list">
-                <?php foreach ($offers as $offer): ?>
+                <?php
+                foreach ($offers as $offer): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
                             <img src="./uploads/<?= $offer['image'] ?>" width="350" height="260" alt="">
@@ -53,25 +55,32 @@
                             </div>
                         </div>
                     </li>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             </ul>
-        <?php else: ?>
+        <?php
+        else: ?>
             <span>Товары в данной категории не найдены</span>
-        <?php endif; ?>
+        <?php
+        endif; ?>
     </section>
-    <?php if ($pages_count > 1): ?>
+    <?php
+    if ($pages_count > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev <?= $current_page <= 1 ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= $search ?>">Назад</a>
             </li>
-            <?php foreach ($pages as $page): ?>
+            <?php
+            foreach ($pages as $page): ?>
                 <li class="pagination-item <?= $page === intval($current_page) ? 'pagination-item-active' : '' ?>">
                     <a href="./search.php?page=<?= $page ?>&search=<?= $search ?>"><?= $page ?></a>
                 </li>
-            <?php endforeach; ?>
+            <?php
+            endforeach; ?>
             <li class="pagination-item pagination-item-next <?= intval($current_page) === $pages_count ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page < $pages_count ? $current_page + 1 : $pages_count ?>&search=<?= $search ?>">Вперед</a>
             </li>
         </ul>
-    <?php endif; ?>
+    <?php
+    endif; ?>
 </div>

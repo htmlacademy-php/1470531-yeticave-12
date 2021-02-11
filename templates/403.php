@@ -2,6 +2,7 @@
 /**
  * @var array $categories
  */
+
 ?>
 
 <nav class="nav">

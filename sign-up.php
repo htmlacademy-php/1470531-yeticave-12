@@ -11,7 +11,7 @@ if (isset($_SESSION['user'])) {
 
 $categories = getCategories($mysql);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['email', 'password', 'name', 'message'];
     $errors = [];
@@ -37,7 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ]);
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $data = ['email' => $form['email'], 'name' => $form['name'], 'password' => $password, 'message' => $form['message']];
+            $data = [
+                'email' => $form['email'],
+                'name' => $form['name'],
+                'password' => $password,
+                'message' => $form['message']
+            ];
             $create_user_res = create_user($mysql, $data);
 
             if (!$create_user_res) {
