@@ -19,12 +19,14 @@ if (!count($offer)) {
 $bets = get_bets($mysql, $id);
 $is_lot_open = strtotime($offer['completion_date']) > time();
 $my_id = isset($_SESSION['user']) ? $_SESSION['user']['id'] : null;
-$is_offer_from_me = intval($offer['id']) === $my_id;
+$is_offer_from_me = intval($offer['user_id']) === $my_id;
 $is_last_bet_from_me = count($bets) ? $my_id === intval($bets[0]['id']) : false;
 $current_price = number_format($offer['current_price'], 0, '', ' ');
-$minimal_bet = number_format(count($bets) ? $offer['bet_step'] + $offer['current_price'] : $offer['current_price'], 0,
+$minimal_bet_value = count($bets) ? $offer['bet_step'] + $offer['current_price'] : $offer['current_price'];
+$minimal_bet = number_format($minimal_bet_value, 0,
     '', ' ');
 $bet_error = '';
+$max_bet = 4294967295;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -36,8 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bet_error = 'empty';
     } elseif (!is_numeric($form['bet'])) {
         $bet_error = 'not_num';
-    } elseif ($bet < $offer['current_price']) {
+    } elseif ($bet < $minimal_bet_value) {
         $bet_error = 'low';
+    } elseif ($bet >= $max_bet) {
+        $bet_error = 'high';
     }
 
     if ($bet_error) {

@@ -315,6 +315,7 @@ function getOfferById(mysqli $sql_resource, int $id): array
     $query = "SELECT l.title                                title,
        l.created_on,
        l.id                                   id,
+       l.user_id,
        l.description                          description,
        l.starting_price                       starting_price,
        IFNULL(MAX(b.price), l.starting_price) current_price,
@@ -606,6 +607,8 @@ function get_bet_error_text(string $error): string
             return 'Введите число';
         case 'low':
             return 'Ставка меньше минимальной';
+        case 'high':
+            return 'Ставка слишком высокая';
         default:
             return '';
     }
