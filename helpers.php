@@ -17,7 +17,8 @@ define('MINUTES_IN_ONE_HOUR', 60);
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -51,7 +52,8 @@ function getRemainingTime(string $date): array
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -68,12 +70,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -118,9 +122,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -183,7 +187,8 @@ function time_ago(string $timestamp): string
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -283,7 +288,13 @@ function getOffers(mysqli $sql_resource): array
 function createOffer(mysqli $sql_resource, array $data): bool
 {
     $offer_data = [
-        $data['title'], $data['description'], $data['image'], $data['starting_price'], $data['completion_date'], $data['bet_step'], $data['category_id']
+        $data['title'],
+        $data['description'],
+        $data['image'],
+        $data['starting_price'],
+        $data['completion_date'],
+        $data['bet_step'],
+        $data['category_id']
     ];
     $query = "INSERT INTO lots (title, description, image, starting_price, completion_date, bet_step, user_id, category_id)
                 VALUES (?, ?, ?, ?, ?, ?, 1, ?);";
@@ -551,7 +562,7 @@ function get_bets(mysqli $sql_resource, int $lot_id): array
  * @param int $user_id - id пользователя
  * @return array
  */
-function get_my_bets(mysqli $sql_resource, int $user_id):array
+function get_my_bets(mysqli $sql_resource, int $user_id): array
 {
     $query = "
 SELECT u.name,
@@ -586,7 +597,8 @@ ORDER BY created_on DESC;";
  * @param string $error - текстовый код ошибки
  * @return string
  */
-function get_bet_error_text(string $error):string {
+function get_bet_error_text(string $error): string
+{
     switch ($error) {
         case 'empty':
             return 'Введите ставку';

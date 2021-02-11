@@ -24,20 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (count(array_filter($errors))) {
         $page_content = include_template("login.php", $page_data);
-    } else if (!is_user_exist($mysql, $form['email'])) {
-        $errors['email'] = 'Пользователь с этим email не зарегистрирован';
-        $page_content = include_template("login.php", array_merge($page_data, ['errors' => $errors]));
     } else {
-        $user = get_user($mysql, $form['email']);
+        if (!is_user_exist($mysql, $form['email'])) {
+            $errors['email'] = 'Пользователь с этим email не зарегистрирован';
+            $page_content = include_template("login.php", array_merge($page_data, ['errors' => $errors]));
+        } else {
+            $user = get_user($mysql, $form['email']);
 
-        if (password_verify($form['password'], $user['password'])) {
-            $_SESSION['user'] = $user;
-            header("Location: ./index.php");
-            exit();
+            if (password_verify($form['password'], $user['password'])) {
+                $_SESSION['user'] = $user;
+                header("Location: ./index.php");
+                exit();
+            }
+
+            $errors['password'] = 'Пароль неверный';
+            $page_content = include_template("login.php", array_merge($page_data, ['errors' => $errors]));
         }
-
-        $errors['password'] = 'Пароль неверный';
-        $page_content = include_template("login.php", array_merge($page_data, ['errors' => $errors]));
     }
 } else {
     if (isset($_SESSION['user'])) {

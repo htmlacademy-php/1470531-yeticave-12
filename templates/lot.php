@@ -27,7 +27,8 @@
             <p class="lot-item__description"><?= $offer['description'] ?></p>
         </div>
         <div class="lot-item__right">
-            <?php if ($is_bet_visible): ?>
+            <?php
+            if ($is_bet_visible): ?>
                 <div class="lot-item__state">
                     <?php
                     [$hours, $minutes] = getRemainingTime($offer['completion_date']);
@@ -62,17 +63,20 @@
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
-            <?php endif; ?>
+            <?php
+            endif; ?>
             <div class="history">
                 <h3>История ставок (<span><?= count($bets) ?></span>)</h3>
                 <table class="history__list">
-                    <?php foreach ($bets as $bet): ?>
+                    <?php
+                    foreach ($bets as $bet): ?>
                         <tr class="history__item">
                             <td class="history__name"><?= $bet['name'] ?></td>
                             <td class="history__price"><?= $bet['price'] ?></td>
                             <td class="history__time"><?= time_ago(time() - strtotime($bet['created_on'])) ?></td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php
+                    endforeach; ?>
                 </table>
             </div>
         </div>

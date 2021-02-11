@@ -18,14 +18,19 @@
 </nav>
 <div class="container">
     <section class="lots">
-        <?php if ($isEmptySearch): ?>
+        <?php
+        if ($isEmptySearch): ?>
             <h2>Введите поисковый запрос</h2>
-        <?php else: ?>
+        <?php
+        else: ?>
             <h2>Результаты поиска по запросу «<span><?= $search ?></span>»</h2>
-        <?php endif; ?>
+        <?php
+        endif; ?>
         <ul class="lots__list">
-            <?php if (count($offers)): ?>
-                <?php foreach ($offers as $offer): ?>
+            <?php
+            if (count($offers)): ?>
+                <?php
+                foreach ($offers as $offer): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
                             <img src="./uploads/<?= $offer['image'] ?>" width="350" height="260" alt="">
@@ -57,25 +62,32 @@
                             </div>
                         </div>
                     </li>
-                <?php endforeach; ?>
-            <?php else: ?>
+                <?php
+                endforeach; ?>
+            <?php
+            else: ?>
                 <p>Ничего не найдено по вашему запросу</p>
-            <?php endif; ?>
+            <?php
+            endif; ?>
         </ul>
     </section>
-    <?php if ($pages_count > 1): ?>
+    <?php
+    if ($pages_count > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev <?= $current_page <= 1 ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page > 1 ? $current_page - 1 : 1 ?>&search=<?= $search ?>">Назад</a>
             </li>
-            <?php foreach ($pages as $page): ?>
+            <?php
+            foreach ($pages as $page): ?>
                 <li class="pagination-item <?= $page === intval($current_page) ? 'pagination-item-active' : '' ?>">
                     <a href="./search.php?page=<?= $page ?>&search=<?= $search ?>"><?= $page ?></a>
                 </li>
-            <?php endforeach; ?>
+            <?php
+            endforeach; ?>
             <li class="pagination-item pagination-item-next <?= intval($current_page) === $pages_count ? 'disabled' : '' ?>">
                 <a href="./search.php?page=<?= $current_page < $pages_count ? $current_page + 1 : $pages_count ?>&search=<?= $search ?>">Вперед</a>
             </li>
         </ul>
-    <?php endif; ?>
+    <?php
+    endif; ?>
 </div>

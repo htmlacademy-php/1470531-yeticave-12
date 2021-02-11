@@ -11,8 +11,10 @@ function check_category(int $category_id, array $categories): ?string
 {
     if (empty($category_id)) {
         return 'Выберите категорию';
-    } else if ($category_id < 0 || $category_id > (count($categories) - 1)) {
-        return 'Категория не найдена';
+    } else {
+        if ($category_id < 0 || $category_id > (count($categories) - 1)) {
+            return 'Категория не найдена';
+        }
     }
 
     return null;
@@ -51,8 +53,10 @@ function check_image(array $file): ?string
 
     if ($is_empty_file_field) {
         return 'Загрузите изображение';
-    } else if ($is_wrong_image_type) {
-        return 'Изображение должно быть в формате jpg или png';
+    } else {
+        if ($is_wrong_image_type) {
+            return 'Изображение должно быть в формате jpg или png';
+        }
     }
 
     return null;
