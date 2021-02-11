@@ -35,7 +35,7 @@
                 foreach ($categories as $category): ?>
                     <option
                         value="<?= $category['id'] ?>"
-                        <?= isset($form['category_id']) && $form['category_id'] == $category['id'] ? 'selected' : '' ?>
+                        <?= isset($form['category_id']) && $form['category_id'] === $category['id'] ? 'selected' : '' ?>
                     >
                         <?= $category['title'] ?>
                     </option>
