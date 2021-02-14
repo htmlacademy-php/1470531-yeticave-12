@@ -7,7 +7,7 @@
 
 <nav class="nav">
     <ul class="nav__list container">
-        <?= render_categories($categories) ?>
+        <?php echo render_categories($categories) ?>
     </ul>
 </nav>
 <section class="lot-item container">

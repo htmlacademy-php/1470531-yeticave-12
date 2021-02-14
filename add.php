@@ -1,8 +1,8 @@
 <?php
 
-include_once 'helpers.php';
-include_once 'form-validators.php';
-include_once 'config.php';
+require_once 'helpers.php';
+require_once 'form-validators.php';
+require_once 'config.php';
 
 if (!isset($_SESSION['user'])) {
     header("Location: ./login.php");
@@ -27,11 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors['completion_date'] = check_date($completion_date);
 
     if (count(array_filter($errors))) {
-        $page_content = include_template('add.php', [
+        $page_content = include_template(
+            'add.php', [
             'categories' => $categories,
             'form' => $form,
             'errors' => $errors
-        ]);
+            ]
+        );
     } else {
         $file_name = uniqid() . '.' . get_extension($file['type']);
         $form['image'] = $file_name;
@@ -55,20 +57,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 } else {
-    $page_content = include_template('add.php', [
+    $page_content = include_template(
+        'add.php', [
         'categories' => $categories,
         'errors' => [],
         'form' => []
-    ]);
+        ]
+    );
 }
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template(
+    'layout.php', [
     'title' => 'Добавление лота',
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
-]);
+    ]
+);
 
 print($layout_content);
 

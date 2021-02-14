@@ -1,7 +1,7 @@
 <?php
 
-include_once 'helpers.php';
-include_once 'config.php';
+require_once 'helpers.php';
+require_once 'config.php';
 
 $categories = getCategories($mysql);
 $search = $_GET['search'] ? trim($_GET['search']) : '';
@@ -23,7 +23,8 @@ if ($search) {
         $offers = make_search($mysql, $search, $page_items, $offset);
     }
 
-    $page_content = include_template('search.php', [
+    $page_content = include_template(
+        'search.php', [
         'categories' => $categories,
         'search' => $search,
         'offers' => $offers,
@@ -31,9 +32,11 @@ if ($search) {
         'pages_count' => $pages_count,
         'pages' => $pages,
         'current_page' => $current_page
-    ]);
+        ]
+    );
 } else {
-    $page_content = include_template('search.php', [
+    $page_content = include_template(
+        'search.php', [
         'categories' => $categories,
         'search' => $search,
         'isEmptySearch' => true,
@@ -41,17 +44,20 @@ if ($search) {
         'pages_count' => 0,
         'pages' => [],
         'current_page' => $current_page
-    ]);
+        ]
+    );
 }
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template(
+    'layout.php', [
     'title' => 'Результаты поиска',
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
-]);
+    ]
+);
 
 print($layout_content);
 

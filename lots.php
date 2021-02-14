@@ -1,7 +1,7 @@
 <?php
 
-include_once 'helpers.php';
-include_once 'config.php';
+require_once 'helpers.php';
+require_once 'config.php';
 
 $category_id = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
 
@@ -31,33 +31,39 @@ if ($items_count !== 0 && $current_page > $pages_count || $current_page < 1) {
 if ($items_count) {
     $offers = get_lots_by_category($mysql, $category_id, $page_items, $offset);
 
-    $page_content = include_template('lots.php', [
+    $page_content = include_template(
+        'lots.php', [
         'categories' => $categories,
         'offers' => $offers,
         'pages_count' => $pages_count,
         'pages' => $pages,
         'current_page' => $current_page,
         'category_title' => $category_title
-    ]);
+        ]
+    );
 } else {
-    $page_content = include_template('lots.php', [
+    $page_content = include_template(
+        'lots.php', [
         'categories' => $categories,
         'offers' => [],
         'pages_count' => $pages_count,
         'pages' => $pages,
         'current_page' => $current_page,
         'category_title' => $category_title
-    ]);
+        ]
+    );
 }
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template(
+    'layout.php', [
     'title' => 'Лоты в категории ' . $category_title,
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
-]);
+    ]
+);
 
 print($layout_content);
 

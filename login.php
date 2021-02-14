@@ -1,8 +1,8 @@
 <?php
 
-include_once 'helpers.php';
-include_once 'form-validators.php';
-include_once 'config.php';
+require_once 'helpers.php';
+require_once 'form-validators.php';
+require_once 'config.php';
 
 if (isset($_SESSION['user'])) {
     header("Location: ./");
@@ -47,21 +47,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $page_content = include_template("login.php", [
+    $page_content = include_template(
+        "login.php", [
         'categories' => $categories,
         'form' => [],
         'errors' => []
-    ]);
+        ]
+    );
 }
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template(
+    'layout.php', [
     'title' => "Вход",
     'isContainerClass' => false,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
-]);
+    ]
+);
 
 print($layout_content);
 

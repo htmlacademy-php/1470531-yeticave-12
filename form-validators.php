@@ -3,8 +3,10 @@
 /**
  * Проверка значения выбранной категории
  *
- * @param int $category_id - id категории
- * @param array $categories - массив категорий
+ * @param  int   $category_id - id
+ *                            категории
+ * @param  array $categories  - массив
+ *                            категорий
  * @return string|null
  */
 function check_category(int $category_id, array $categories): ?string
@@ -23,7 +25,7 @@ function check_category(int $category_id, array $categories): ?string
 /**
  * Проверка поля с целым числом
  *
- * @param int $number - целое число
+ * @param  int $number - целое число
  * @return string|null
  */
 function check_number(int $number): ?string
@@ -42,7 +44,7 @@ function check_number(int $number): ?string
 /**
  * Проверка загрузки изображения
  *
- * @param array $file - файл из массива $_FILES
+ * @param  array $file - файл из массива $_FILES
  * @return string|null
  */
 function check_image(array $file): ?string
@@ -65,7 +67,7 @@ function check_image(array $file): ?string
 /**
  * Проверка текстового поля
  *
- * @param string $text - текст для проверки
+ * @param  string $text - текст для проверки
  * @return string|null
  */
 function check_text(string $text): ?string
@@ -80,7 +82,7 @@ function check_text(string $text): ?string
 /**
  * Проверка введенной даты
  *
- * @param string $date - дата в формате ГГГГ-ММ-ДД
+ * @param  string $date - дата в формате ГГГГ-ММ-ДД
  * @return string|null
  */
 function check_date(string $date): ?string
@@ -89,8 +91,7 @@ function check_date(string $date): ?string
         return 'Заполните это поле';
     }
 
-    if (
-        !$date
+    if (!$date
         || !is_date_valid($date)
         || intval(getRemainingTime($date)['0']) < 24
     ) {
@@ -103,7 +104,7 @@ function check_date(string $date): ?string
 /**
  * Проверка введенного email
  *
- * @param string $email
+ * @param  string $email
  * @return string|null
  */
 function check_email(string $email): ?string

@@ -12,11 +12,11 @@
     <ul class="promo__list">
         <?php
         foreach ($categories as $category): ?>
-            <li class="promo__item promo__item promo__item--<?= $category['symbol_code'] ?>">
+            <li class="promo__item promo__item promo__item--<?php echo $category['symbol_code'] ?>">
                 <a class="promo__link"
-                   href="./lots.php?category=<?= $category['id'] ?>"><?= htmlspecialchars($category['title']) ?></a>
+                   href="./lots.php?category=<?php echo $category['id'] ?>"><?php echo htmlspecialchars($category['title']) ?></a>
             </li>
-        <?php
+            <?php
         endforeach; ?>
     </ul>
 </section>
@@ -29,20 +29,20 @@
         foreach ($offers as $offer): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="./uploads/<?= $offer['image'] ?>" width="350" height="260" alt="">
+                    <img src="./uploads/<?php echo $offer['image'] ?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= htmlspecialchars($offer['category']) ?></span>
+                    <span class="lot__category"><?php echo htmlspecialchars($offer['category']) ?></span>
                     <h3 class="lot__title">
-                        <a class="text-link" href="./lot.php?id=<?= $offer['id'] ?>">
-                            <?= htmlspecialchars($offer['title']) ?>
+                        <a class="text-link" href="./lot.php?id=<?php echo $offer['id'] ?>">
+                            <?php echo htmlspecialchars($offer['title']) ?>
                         </a>
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
-                                <?= htmlspecialchars(format_price($offer['starting_price'])) ?></span>
+                                <?php echo htmlspecialchars(format_price($offer['starting_price'])) ?></span>
                         </div>
                         <?php
                         [$hours, $minutes] = getRemainingTime($offer['completion_date']);
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </li>
-        <?php
+            <?php
         endforeach; ?>
     </ul>
 </section>

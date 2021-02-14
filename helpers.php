@@ -27,7 +27,8 @@ function is_date_valid(string $date): bool
 
 /**
  * Возвращает оставшееся количество часов и минут до переданной даты
- * @param string $date дата в формате 'ГГГГ-ММ-ДД'
+ *
+ * @param  string $date дата в формате 'ГГГГ-ММ-ДД'
  * @return array массив вида [ЧЧ, ММ]
  */
 function getRemainingTime(string $date): array
@@ -47,8 +48,11 @@ function getRemainingTime(string $date): array
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
  * @param mysqli $link Ресурс соединения
- * @param string $sql SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
+ * @param string $sql  SQL запрос с
+ *                     плейсхолдерами вместо
+ *                     значений
+ * @param array  $data Данные для вставки на
+ *                     место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
@@ -115,10 +119,15 @@ function db_get_prepare_stmt(mysqli $link, string $sql, $data = []): mysqli_stmt
  *     );
  * Результат: "Я поставил таймер на 5 минут"
  *
- * @param int $number Число, по которому вычисляем форму множественного числа
- * @param string $one Форма единственного числа: яблоко, час, минута
- * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
- * @param string $many Форма множественного числа для остальных чисел
+ * @param int    $number Число, по которому вычисляем
+ *                       форму множественного числа
+ * @param string $one    Форма единственного
+ *                       числа: яблоко, час, минута
+ * @param string $two    Форма множественного числа для 2,
+ *                       3, 4: яблока, часа, минуты
+ * @param string $many   Форма множественного
+ *                       числа для остальных
+ *                       чисел
  *
  * @return string Рассчитанная форма множественнго числа
  */
@@ -129,27 +138,27 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
     $mod100 = $number % 100;
 
     switch (true) {
-        case ($mod100 >= 11 && $mod100 <= 20):
-            return $many;
+    case ($mod100 >= 11 && $mod100 <= 20):
+        return $many;
 
-        case ($mod10 > 5):
-            return $many;
+    case ($mod10 > 5):
+        return $many;
 
-        case ($mod10 === 1):
-            return $one;
+    case ($mod10 === 1):
+        return $one;
 
-        case ($mod10 >= 2 && $mod10 <= 4):
-            return $two;
+    case ($mod10 >= 2 && $mod10 <= 4):
+        return $two;
 
-        default:
-            return $many;
+    default:
+        return $many;
     }
 }
 
 /**
  * Возвращает дату в "человеческом формате"
  *
- * @param string $timestamp
+ * @param  string $timestamp
  * @return string
  */
 function time_ago(string $timestamp): string
@@ -183,8 +192,10 @@ function time_ago(string $timestamp): string
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
+ *
+ * @param  string $name Путь к файлу шаблона относительно папки templates
+ * @param  array  $data Ассоциативный массив с
+ *                      данными для шаблона
  * @return string Итоговый HTML
  */
 function include_template(string $name, array $data = []): string
@@ -198,7 +209,7 @@ function include_template(string $name, array $data = []): string
 
     ob_start();
     extract($data);
-    require $name;
+    include $name;
 
     $result = ob_get_clean();
 
@@ -208,7 +219,7 @@ function include_template(string $name, array $data = []): string
 /**
  * Форматирует число. Отделяет пробелом тысячные части и добавляет символ рубля
  *
- * @param float $price Цена товара
+ * @param  float $price Цена товара
  * @return string Цена товара с символом рубля
  */
 function format_price(float $price): string
@@ -225,7 +236,7 @@ function format_price(float $price): string
 /**
  * Принимает ресурс соединения mysqli, возвращает массив категорий или пустой массив
  *
- * @param mysqli $sql_resource ресурс соедниения
+ * @param  mysqli $sql_resource ресурс соедниения
  * @return array возвращаемый массив категорий
  */
 function getCategories(mysqli $sql_resource): array
@@ -250,7 +261,7 @@ function getCategories(mysqli $sql_resource): array
 /**
  * Принимает ресурс соединения mysqli, возвращает массив объявлений или пустой массив
  *
- * @param mysqli $sql_resource ресурс соедниения
+ * @param  mysqli $sql_resource ресурс соедниения
  * @return array возвращаемый массив объявлений
  */
 function getOffers(mysqli $sql_resource): array
@@ -281,8 +292,11 @@ function getOffers(mysqli $sql_resource): array
 /**
  * Создает оффер из переданного массива с данными
  *
- * @param mysqli $sql_resource
- * @param array $data - ассоциативный массив с данными
+ * @param  mysqli $sql_resource
+ * @param  array  $data         -
+ *                              ассоциативный
+ *                              массив с
+ *                              данными
  * @return bool - возвращает true если операция успешна
  */
 function createOffer(mysqli $sql_resource, array $data): bool
@@ -306,8 +320,9 @@ function createOffer(mysqli $sql_resource, array $data): bool
 /**
  * Принимает ресурс соединения mysqli и id лота, возвращает массив объявлений или пустой массив
  *
- * @param mysqli $sql_resource ресурс соедниения
- * @param int $id id лота
+ * @param  mysqli $sql_resource ресурс соедниения
+ * @param  int    $id           id
+ *                              лота
  * @return array возвращаемый ассоциативный массив объявлений
  */
 function getOfferById(mysqli $sql_resource, int $id): array
@@ -350,8 +365,9 @@ function redirect_to_404(): void
 /**
  * Проверяет, существует ли пользователь по переданному емейлу
  *
- * @param mysqli $sql_resource
- * @param string $email - email пользователя
+ * @param  mysqli $sql_resource
+ * @param  string $email        - email
+ *                              пользователя
  * @return bool
  */
 function is_user_exist(mysqli $sql_resource, string $email): bool
@@ -374,8 +390,9 @@ function is_user_exist(mysqli $sql_resource, string $email): bool
 /**
  * Получает данные пользователя по email
  *
- * @param mysqli $sql_resource
- * @param string $email - email пользователя
+ * @param  mysqli $sql_resource
+ * @param  string $email        - email
+ *                              пользователя
  * @return array
  */
 function get_user(mysqli $sql_resource, string $email): array
@@ -398,8 +415,9 @@ function get_user(mysqli $sql_resource, string $email): array
 /**
  * Создает пользователя
  *
- * @param mysqli $sql_resource
- * @param $data - массив с данными из формы регистрации [email, name, password, message]
+ * @param  mysqli $sql_resource
+ * @param  $data         - массив с данными из формы регистрации
+ *                       [email, name, password, message]
  * @return bool
  */
 function create_user(mysqli $sql_resource, $data): bool
@@ -413,7 +431,7 @@ function create_user(mysqli $sql_resource, $data): bool
 /**
  * Возвращает расширение файла в зависимости от переданного mime type
  *
- * @param string $mime_type
+ * @param  string $mime_type
  * @return string
  */
 function get_extension(string $mime_type): string
@@ -428,8 +446,10 @@ function get_extension(string $mime_type): string
 
 /**
  * Возвращает количество найденных результатов поиска
- * @param mysqli $sql_resource
- * @param $data - выражение для поиска
+ *
+ * @param  mysqli $sql_resource
+ * @param  $data         - выражение
+ *                       для поиска
  * @return int
  */
 function count_search(mysqli $sql_resource, string $data): int
@@ -453,8 +473,10 @@ function count_search(mysqli $sql_resource, string $data): int
 
 /**
  * Возвращает количество найденных офферов для выбранной категории
- * @param mysqli $sql_resource
- * @param int $category_id - категории
+ *
+ * @param  mysqli $sql_resource
+ * @param  int    $category_id  -
+ *                              категории
  * @return int
  */
 function count_offers_in_category(mysqli $sql_resource, int $category_id): int
@@ -478,10 +500,18 @@ function count_offers_in_category(mysqli $sql_resource, int $category_id): int
 
 /**
  * Возвращает результаты поиска в виде массива
- * @param mysqli $sql_resource
- * @param string $data - выражение для поиска
- * @param int $limit - максимальное количество результатов в итоговом массиве
- * @param int $offset - сдвиг
+ *
+ * @param  mysqli $sql_resource
+ * @param  string $data         - выражение
+ *                              для поиска
+ * @param  int    $limit        -
+ *                              максимальное
+ *                              количество
+ *                              результатов в
+ *                              итоговом
+ *                              массиве
+ * @param  int    $offset       -
+ *                              сдвиг
  * @return array
  */
 function make_search(mysqli $sql_resource, string $data, int $limit, int $offset): array
@@ -518,10 +548,13 @@ function make_search(mysqli $sql_resource, string $data, int $limit, int $offset
 /**
  * Создает ставку
  *
- * @param mysqli $sql_resource
- * @param int $bet - ставка
- * @param int $offer_id - id оффера
- * @param int $user_id - id польователя
+ * @param  mysqli $sql_resource
+ * @param  int    $bet          -
+ *                              ставка
+ * @param  int    $offer_id     - id
+ *                              оффера
+ * @param  int    $user_id      - id
+ *                              польователя
  * @return bool
  */
 function make_bet(mysqli $sql_resource, int $bet, int $offer_id, int $user_id): bool
@@ -535,8 +568,9 @@ function make_bet(mysqli $sql_resource, int $bet, int $offer_id, int $user_id): 
 /**
  * Возвращает массив ставок для лота
  *
- * @param mysqli $sql_resource
- * @param int $lot_id - id лота
+ * @param  mysqli $sql_resource
+ * @param  int    $lot_id       - id
+ *                              лота
  * @return array
  */
 function get_bets(mysqli $sql_resource, int $lot_id): array
@@ -559,8 +593,9 @@ function get_bets(mysqli $sql_resource, int $lot_id): array
 /**
  * Возвращает все ставки пользователя
  *
- * @param mysqli $sql_resource
- * @param int $user_id - id пользователя
+ * @param  mysqli $sql_resource
+ * @param  int    $user_id      - id
+ *                              пользователя
  * @return array
  */
 function get_my_bets(mysqli $sql_resource, int $user_id): array
@@ -595,32 +630,32 @@ ORDER BY created_on DESC;";
 /**
  * Возвращет текст ошибки для переданного кода ошибки
  *
- * @param string $error - текстовый код ошибки
+ * @param  string $error - текстовый код ошибки
  * @return string
  */
 function get_bet_error_text(string $error): string
 {
     switch ($error) {
-        case 'empty':
-            return 'Введите ставку';
-        case 'not_num':
-            return 'Введите число';
-        case 'low':
-            return 'Ставка меньше минимальной';
-        case 'high':
-            return 'Ставка слишком высокая';
-        default:
-            return '';
+    case 'empty':
+        return 'Введите ставку';
+    case 'not_num':
+        return 'Введите число';
+    case 'low':
+        return 'Ставка меньше минимальной';
+    case 'high':
+        return 'Ставка слишком высокая';
+    default:
+        return '';
     }
 }
 
 /**
  * Возвращает массив лотов в зависимости от категории
  *
- * @param mysqli $sql_resource
- * @param int $category_id
- * @param int $limit
- * @param int $offset
+ * @param  mysqli $sql_resource
+ * @param  int    $category_id
+ * @param  int    $limit
+ * @param  int    $offset
  * @return array
  */
 function get_lots_by_category(mysqli $sql_resource, int $category_id, int $limit, int $offset): array
@@ -657,7 +692,7 @@ function get_lots_by_category(mysqli $sql_resource, int $category_id, int $limit
 /**
  * Возвращает html разметку для списка категорий
  *
- * @param array $categories - массив категорий
+ * @param  array $categories - массив категорий
  * @return string
  */
 function render_categories(array $categories): string
@@ -678,7 +713,7 @@ function render_categories(array $categories): string
 /**
  * Возврвшает массив завершенных лотов без победителя
  *
- * @param mysqli $sql_resource
+ * @param  mysqli $sql_resource
  * @return array
  */
 function get_completed_offers(mysqli $sql_resource): array
@@ -701,8 +736,9 @@ function get_completed_offers(mysqli $sql_resource): array
 /**
  * Возвращает последнюю ставку для переданного лота
  *
- * @param mysqli $sql_resource
- * @param int $offer_id - id оффера
+ * @param  mysqli $sql_resource
+ * @param  int    $offer_id     - id
+ *                              оффера
  * @return array
  */
 function get_last_bet(mysqli $sql_resource, int $offer_id): array
@@ -725,9 +761,11 @@ function get_last_bet(mysqli $sql_resource, int $offer_id): array
 /**
  * Устанавливает победителя для переданного лота
  *
- * @param $sql_resource
- * @param int $offer_id - id оффера
- * @param int $user_id - id пользователя
+ * @param  $sql_resource
+ * @param  int $offer_id     - id
+ *                           оффера
+ * @param  int $user_id      - id
+ *                           пользователя
  * @return bool
  */
 function set_winner($sql_resource, int $offer_id, int $user_id): bool
