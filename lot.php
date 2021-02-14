@@ -23,8 +23,12 @@ $is_offer_from_me = intval($offer['user_id']) === $my_id;
 $is_last_bet_from_me = count($bets) ? $my_id === intval($bets[0]['id']) : false;
 $current_price = number_format($offer['current_price'], 0, '', ' ');
 $minimal_bet_value = count($bets) ? $offer['bet_step'] + $offer['current_price'] : $offer['current_price'];
-$minimal_bet = number_format($minimal_bet_value, 0,
-    '', ' ');
+$minimal_bet = number_format(
+    $minimal_bet_value,
+    0,
+    '',
+    ' '
+);
 $bet_error = '';
 $max_bet = 4294967295;
 
@@ -81,5 +85,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-?>

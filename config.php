@@ -25,7 +25,7 @@ $mysql = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database
 mysqli_set_charset($mysql, "utf8");
 
 if (!$mysql) {
-    print ('Ошибка подключения: ' . mysqli_connect_error());
+    print('Ошибка подключения: ' . mysqli_connect_error());
     exit();
 }
 
