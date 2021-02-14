@@ -23,9 +23,11 @@ function set_winners(mysqli $sql_resource): void
             $message->setSubject("Ваша ставка победила");
             $message->setFrom(["keks@phpdemo.ru" => "Кекс"]);
             $message->setTo([$offer['email'] => $offer['name']]);
-            $content = include_template('email.php', [
+            $content = include_template(
+                'email.php', [
                 'data' => $offer,
-            ]);
+                ]
+            );
             $message->setBody($content, 'text/html');
 
             $mailer->send($message);

@@ -1,7 +1,7 @@
 <?php
 
-include_once 'helpers.php';
-include_once 'config.php';
+require_once 'helpers.php';
+require_once 'config.php';
 
 $categories = getCategories($mysql);
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -49,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($bet_error) {
-        $page_content = include_template('lot.php', [
+        $page_content = include_template(
+            'lot.php', [
             'categories' => $categories,
             'offer' => $offer,
             'is_bet_visible' => $is_auth && !$is_offer_from_me && $is_lot_open && !$is_last_bet_from_me,
@@ -57,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'bet_error' => get_bet_error_text($bet_error),
             'current_price' => $current_price,
             'minimal_bet' => $minimal_bet
-        ]);
+            ]
+        );
     } else {
         $res = make_bet($mysql, $bet, $id, $_SESSION['user']['id']);
 
@@ -65,7 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 } else {
-    $page_content = include_template('lot.php', [
+    $page_content = include_template(
+        'lot.php', [
         'categories' => $categories,
         'offer' => $offer,
         'is_bet_visible' => $is_auth && !$is_offer_from_me && $is_lot_open && !$is_last_bet_from_me,
@@ -73,15 +76,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'bet_error' => '',
         'current_price' => $current_price,
         'minimal_bet' => $minimal_bet
-    ]);
+        ]
+    );
 }
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template(
+    'layout.php', [
     'title' => $offer['title'],
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
-]);
+    ]
+);
 
 print($layout_content);
